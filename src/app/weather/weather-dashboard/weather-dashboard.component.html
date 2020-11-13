@@ -1,0 +1,26 @@
+<ion-tabs>
+
+  <ion-header>
+    <ion-toolbar >
+      <ion-searchbar inputmode="numeric" (search)=onZipCodeChanged($event.target.value) [(ngModel)]="weatherZipCode"></ion-searchbar>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="current">
+      <ion-icon name="partly-sunny"></ion-icon>
+      <ion-label>Current</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="hourly">
+      <ion-icon name="time"></ion-icon>
+      <ion-label>Hourly</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="future">
+      <ion-icon name="paper-plane"></ion-icon>
+      <ion-label>10 Day</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+</ion-tabs>

@@ -1,0 +1,29 @@
+<!-- <ion-header no-lines no-border class="ion-padding-top " [translucent]="true">
+  <ion-toolbar no-lines>
+    <ion-title no-lines class="ion-text-center">
+      Current Weather
+    </ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+
+
+<ion-content [fullscreen]="true">
+  <ion-list-header>
+    <h1>Current Weather</h1>
+  </ion-list-header>
+  <!-- <ion-header>
+    <ion-toolbar>
+      <ion-title size="large">Current Weather</ion-title>
+    </ion-toolbar>
+  </ion-header> -->
+
+  <ng-container *ngIf="weatherData">
+
+
+    City:<div>{{weatherData.name}}</div>
+  </ng-container>
+
+
+</ion-content>
+
