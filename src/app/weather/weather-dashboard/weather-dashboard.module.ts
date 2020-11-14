@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { WeatherDashboardRoutingModule } from './weather-dashboard-routing.module';
@@ -14,6 +14,7 @@ import { WeatherDashboardComponent } from './weather-dashboard.component';
     CommonModule,
     FormsModule,
     WeatherDashboardRoutingModule
-  ]
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class WeatherDashboardModule { }
