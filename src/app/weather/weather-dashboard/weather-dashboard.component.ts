@@ -13,6 +13,7 @@ export class WeatherDashboardComponent implements OnInit {
   private subscriptions = new Subscription()
   public weatherData: any;
   public weatherZipCode: string;
+  private readonly weatherZipCodeStorageKey: string = "weatherZipCode";
 
   constructor(private weatherService: WeatherService) { }
 
@@ -21,14 +22,17 @@ export class WeatherDashboardComponent implements OnInit {
     this.subscriptions.add(this.weatherService.getCurrentZipCode$.pipe(take(1)).subscribe(data => this.onZipCodeDataLoaded(data)));
   }
 
-  onZipCodeChanged(zipCode: string) {
+  onZipCodeChanged() {
+    const lastSetWeatherZipCode = localStorage.getItem(this.weatherZipCodeStorageKey);
     //Only make a call if the zip code was changed by the user
-    if (zipCode != this.weatherZipCode) {
-      this.weatherService.setWeatherZipCode(zipCode);
+    if (this.weatherZipCode != lastSetWeatherZipCode) {
+      localStorage.setItem(this.weatherZipCodeStorageKey, this.weatherZipCode);
+      this.weatherService.setWeatherZipCode(this.weatherZipCode);
     }
   }
 
   onZipCodeDataLoaded(zipCode: string) {
+    localStorage.setItem(this.weatherZipCodeStorageKey, zipCode);
     this.weatherZipCode = zipCode;
   }
 
