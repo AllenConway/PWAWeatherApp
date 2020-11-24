@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WeatherService } from '../shared/services/weather.service';
+import { CurrentWeather } from '../shared/models/current-weather.model';
 
 @Component({
   selector: 'app-weather-current',
@@ -10,7 +11,8 @@ import { WeatherService } from '../shared/services/weather.service';
 export class WeatherCurrentComponent implements OnInit {
 
   private subscriptions = new Subscription()
-  public weatherData: any;
+  private readonly weatherCityNameStorageKey: string = "weatherCityName";
+  public weatherData: CurrentWeather;
 
   constructor(private weatherService: WeatherService) { }
 
@@ -19,12 +21,13 @@ export class WeatherCurrentComponent implements OnInit {
     this.subscriptions.add(this.weatherService.getCurrentZipCode$.subscribe(data => this.onZipCodeChanged(data)));
   }
 
-  onGetCurrentWeather(data: any) {
+  onGetCurrentWeather(data: CurrentWeather) {
+    localStorage.setItem(this.weatherCityNameStorageKey, data?.name);
     this.weatherData = data;
   }
 
   onZipCodeChanged(zipCode: string) {
-    this.weatherService.getCurrentWeather(zipCode);
+    // this.weatherService.getCurrentWeather(zipCode);
   }
 
 }

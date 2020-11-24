@@ -1,16 +1,38 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Weather Future
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true">
+  <ion-list-header>
+    <h1>7 Day Weather</h1>
+  </ion-list-header>
 
-<ion-content [fullscreen]="false">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Weather Future</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
+  <ng-container *ngIf="true">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-subtitle>Weather Location </ion-card-subtitle>
+              <ion-card-title>Location Here</ion-card-title>
+            </ion-card-header>
+            <ion-card-content class="ion-no-padding">
+              <ion-list>
+                <ion-list-header>
+                  Hourly Weather
+                </ion-list-header>
+        
+                <ion-item>
+                  <ion-avatar slot="start">
+                    <img src="./avatar-finn.png">
+                  </ion-avatar>
+                  <ion-label>
+                    <h2>Finn</h2>
+                    <h3>I'm a big deal</h3>
+                    <p>Listen, I've had a pretty messed up day...</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>              
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
 </ion-content>

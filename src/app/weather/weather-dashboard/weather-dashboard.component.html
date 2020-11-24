@@ -1,4 +1,4 @@
-<ion-tabs>
+<ion-tabs (ionTabsDidChange)="ionTabsDidChange($event)">
 
   <ion-header>
     <ion-toolbar >
@@ -19,7 +19,7 @@
 
     <ion-tab-button tab="future">
       <ion-icon name="paper-plane"></ion-icon>
-      <ion-label>10 Day</ion-label>
+      <ion-label>7 Day</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 
