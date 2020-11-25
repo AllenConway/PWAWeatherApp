@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WeatherService } from '../shared/services/weather.service';
 import { Subscription } from 'rxjs';
 import { HourlyWeather } from '../shared/models';
@@ -9,7 +9,7 @@ import { take } from 'rxjs/operators';
   templateUrl: './weather-hourly.component.html',
   styleUrls: ['./weather-hourly.component.scss'],
 })
-export class WeatherHourlyComponent implements OnInit {
+export class WeatherHourlyComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription()
   private zipCode: string;
@@ -27,6 +27,12 @@ export class WeatherHourlyComponent implements OnInit {
     // this.weatherService.getHourlyWeather(localStorage.getItem(this.weatherZipCodeStorageKey));
   }
 
+  ngOnDestroy(): void {
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
+    }
+  }
+
   private onGetHourlyWeather(data: HourlyWeather) {
     this.weatherCityName = localStorage.getItem(this.weatherCityNameStorageKey);
     this.weatherData = data;
@@ -39,7 +45,7 @@ export class WeatherHourlyComponent implements OnInit {
 
   private onTabChangeCompleted(tabName: string) {
     if(tabName === 'hourly') {
-      this.weatherService.getHourlyWeather(this.zipCode);
+      this.weatherService.getHourlyWeather();
     }
   }
 

@@ -1,6 +1,6 @@
 {
-  "name": "app",
-  "short_name": "app",
+  "name": "PWA Weather App",
+  "short_name": "PWA Weather App",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

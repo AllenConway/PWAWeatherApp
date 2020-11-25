@@ -30,6 +30,7 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
   }
 
   onZipCodeChanged() {
+    if (!this.weatherZipCode) return;
     const lastSetWeatherZipCode = localStorage.getItem(this.weatherZipCodeStorageKey);
     //Only make a call if the zip code was changed by the user
     if (this.weatherZipCode != lastSetWeatherZipCode) {
