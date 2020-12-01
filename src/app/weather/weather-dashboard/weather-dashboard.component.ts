@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WeatherService } from '../shared/services/weather.service';
 import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { SwUpdate, UpdateActivatedEvent, UpdateAvailableEvent } from '@angular/service-worker';
 
 @Component({
   selector: 'app-weather-dashboard',
@@ -15,12 +15,17 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
   public weatherZipCode: string;
   private readonly weatherZipCodeStorageKey: string = "weatherZipCode";
 
-  constructor(private weatherService: WeatherService) { }
+  constructor(private weatherService: WeatherService, private swUpdate: SwUpdate) { }
 
   ngOnInit() {
     // We subscribe to the zipCode observable on initial load as a means to an end to get the default zip loaded, so only take the 1st stream
     // this.subscriptions.add(this.weatherService.getCurrentZipCode$.pipe(take(1)).subscribe(data => this.onZipCodeDataLoaded(data)));
     this.subscriptions.add(this.weatherService.getCurrentZipCode$.subscribe(data => this.onZipCodeDataLoaded(data)));
+    // Let's keep tabs on the ServiceWorker state changes and subscribe to some of the lifecycle events
+    // The service worker checks for updates during initialization and on each navigation request
+    this.subscriptions.add(this.swUpdate.activated.subscribe(data => this.onSwActivated(data)));
+    this.subscriptions.add(this.swUpdate.available.subscribe(data => this.onSwUpdateAvailable(data)));
+    
   }
 
   ngOnDestroy(): void {
@@ -47,6 +52,17 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
 
   ionTabsDidChange($event) {
     this.weatherService.currentWeatherTabSelectedSource.next($event.tab);
+  }
+
+  private onSwActivated(data: UpdateActivatedEvent) {
+    console.log('Old weather app version prior to activation: ', data.previous.hash);
+    console.log('New weather app version after activation: ', data.current.hash);
+  }
+
+  private onSwUpdateAvailable(data: UpdateAvailableEvent) {
+    console.log('Current weather app version: ', data.current.hash);
+    console.log('Newest available app version: ', data.available.hash);
+    this.swUpdate.activateUpdate(); //.then(() => document.location.reload());  ensure we don't break Lazy Loading and reload the page
   }
 
 }
