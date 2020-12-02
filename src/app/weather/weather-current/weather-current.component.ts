@@ -18,16 +18,11 @@ export class WeatherCurrentComponent implements OnInit {
 
   ngOnInit() {
     this.subscriptions.add(this.weatherService.getCurrentWeather$.subscribe(data => this.onGetCurrentWeather(data)));
-    this.subscriptions.add(this.weatherService.getCurrentZipCode$.subscribe(data => this.onZipCodeChanged(data)));
   }
 
   onGetCurrentWeather(data: CurrentWeather) {
     localStorage.setItem(this.weatherCityNameStorageKey, data?.name);
     this.weatherData = data;
-  }
-
-  onZipCodeChanged(zipCode: string) {
-    // this.weatherService.getCurrentWeather(zipCode);
   }
 
 }

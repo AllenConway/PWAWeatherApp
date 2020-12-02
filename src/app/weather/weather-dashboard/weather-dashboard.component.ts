@@ -19,7 +19,6 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // We subscribe to the zipCode observable on initial load as a means to an end to get the default zip loaded, so only take the 1st stream
-    // this.subscriptions.add(this.weatherService.getCurrentZipCode$.pipe(take(1)).subscribe(data => this.onZipCodeDataLoaded(data)));
     this.subscriptions.add(this.weatherService.getCurrentZipCode$.subscribe(data => this.onZipCodeDataLoaded(data)));
     // Let's keep tabs on the ServiceWorker state changes and subscribe to some of the lifecycle events
     // The service worker checks for updates during initialization and on each navigation request

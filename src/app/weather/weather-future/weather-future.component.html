@@ -19,9 +19,7 @@
                 </ion-list-header>        
                 <ion-item *ngFor="let futureWeatherData of weatherData.daily">
                   <ion-avatar slot="start">
-
-                          <img [src]="futureWeatherData.weather[0]?.icon">
-
+                    <img [src]="futureWeatherData.weather[0]?.icon">
                   </ion-avatar>
                   <ion-label>
                     <h2>{{futureWeatherData.dt * 1000 | date:'EE, MM/dd'}}</h2>
@@ -29,7 +27,6 @@
                     <h3>High: {{futureWeatherData.temp.max | number: "1.0-0"}}</h3>
                     <h3>Low: {{futureWeatherData.temp.min | number: "1.0-0"}}</h3>
                     <h3>Precipitation: {{futureWeatherData.pop * 100}}%</h3>
-                    <!-- <p>Listen, I've had a pretty messed up day...</p> -->
                   </ion-label>
                 </ion-item>
               </ion-list>
