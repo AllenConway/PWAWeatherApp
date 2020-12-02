@@ -2,7 +2,7 @@
 
   <ion-header>
     <ion-toolbar >
-      <ion-searchbar inputmode="numeric" (search)=onZipCodeChanged($event.target.value) [(ngModel)]="weatherZipCode"></ion-searchbar>
+      <ion-searchbar inputmode="numeric" (search)=onZipCodeChanged() [(ngModel)]="weatherZipCode"></ion-searchbar>
     </ion-toolbar>
   </ion-header>
 
@@ -19,7 +19,7 @@
 
     <ion-tab-button tab="future">
       <ion-icon name="paper-plane"></ion-icon>
-      <ion-label>10 Day</ion-label>
+      <ion-label>7 Day</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 
