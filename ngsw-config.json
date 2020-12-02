@@ -25,6 +25,20 @@
           "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
         ]
       }
+    },
+    {
+      "name": "icons",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/svg/partly-sunny.svg",
+          "/svg/time.svg",
+          "/svg/paper-plane.svg",
+          "/svg/search-sharp.svg",
+          "/svg/close-sharp.svg"
+        ]
+      }
     }
   ]
 }
