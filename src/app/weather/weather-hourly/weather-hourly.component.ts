@@ -24,7 +24,6 @@ export class WeatherHourlyComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.weatherService.getHourlyWeather$.subscribe(data => this.onGetHourlyWeather(data)));
     this.subscriptions.add(this.weatherService.getCurrentZipCode$.pipe(take(1)).subscribe(data => this.onZipCodeDataLoaded(data)));
     this.subscriptions.add(this.weatherService.currentWeatherTabSelected$.subscribe(data => this.onTabChangeCompleted(data)));
-    // this.weatherService.getHourlyWeather(localStorage.getItem(this.weatherZipCodeStorageKey));
   }
 
   ngOnDestroy(): void {
@@ -40,7 +39,6 @@ export class WeatherHourlyComponent implements OnInit, OnDestroy {
 
   private onZipCodeDataLoaded(zipCode: string) {
     this.zipCode = zipCode;
-    // this.weatherService.getHourlyWeather(zipCode);
   }
 
   private onTabChangeCompleted(tabName: string) {
