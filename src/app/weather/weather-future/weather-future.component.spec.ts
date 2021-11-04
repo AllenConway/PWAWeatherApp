@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { WeatherFutureComponent } from './weather-future.component';
@@ -8,7 +8,7 @@ describe('WeatherFutureComponent', () => {
   let component: WeatherFutureComponent;
   let fixture: ComponentFixture<WeatherFutureComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ WeatherFutureComponent ],
       imports: [IonicModule.forRoot()],

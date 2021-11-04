@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { WeatherCurrentComponent } from './weather-current.component';
@@ -8,7 +8,7 @@ describe('WeatherCurrentComponent', () => {
   let component: WeatherCurrentComponent;
   let fixture: ComponentFixture<WeatherCurrentComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ WeatherCurrentComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
