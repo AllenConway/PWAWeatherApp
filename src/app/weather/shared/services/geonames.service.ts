@@ -9,7 +9,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 export class GeonamesService {
 
   private readonly geonamesUserName: string = "pwaweatherapp";
-  private readonly geonamesBaseUrl: string = "http://api.geonames.org";
+  private readonly geonamesBaseUrl: string = "https://secure.geonames.org";
   private getPostalCodeSource = new Subject<string>();
   public getPostalCode$ = this.getPostalCodeSource.asObservable();
 

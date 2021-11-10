@@ -55,14 +55,13 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
   }
 
   useCurrentGeolocation() {
-    console.log('Hello here is your location');
     navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
       // Get the zipcode for the user's location, and update the weather
       this.geonamesService.getPostalCode(latitude, longitude);
     }, (error) => {
-      alert('User not allowed geolocation access');
+      alert('User does not allow geolocation access');
       // Denotes the maximum length of time that is allowed to pass from the call to 
       // getCurrentPosition() or watchPosition() until the corresponding successCallback is invoked
     }, { timeout: 10000 })  
