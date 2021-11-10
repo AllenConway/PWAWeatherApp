@@ -33,7 +33,7 @@ export class WeatherHourlyComponent implements OnInit, OnDestroy {
   }
 
   private onGetHourlyWeather(data: HourlyWeather) {
-    this.weatherCityName = localStorage.getItem(this.weatherCityNameStorageKey);
+    this.weatherCityName = JSON.parse(localStorage.getItem(this.weatherCityNameStorageKey));
     this.weatherData = data;
   }
 

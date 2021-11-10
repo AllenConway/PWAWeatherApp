@@ -21,7 +21,7 @@ export class WeatherCurrentComponent implements OnInit {
   }
 
   onGetCurrentWeather(data: CurrentWeather) {
-    localStorage.setItem(this.weatherCityNameStorageKey, data?.name);
+    localStorage.setItem(this.weatherCityNameStorageKey, JSON.stringify(data?.name));
     this.weatherData = data;
   }
 

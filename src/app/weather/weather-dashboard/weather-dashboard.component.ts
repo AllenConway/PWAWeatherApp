@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { GeonamesService } from '../shared/services/geonames.service';
 import { WeatherService } from '../shared/services/weather.service';
-import { Subscription } from 'rxjs';
+import { Subscription, zip } from 'rxjs';
 import { SwUpdate, UpdateActivatedEvent, UpdateAvailableEvent } from '@angular/service-worker';
 
 @Component({
@@ -15,7 +16,7 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
   public weatherZipCode: string;
   private readonly weatherZipCodeStorageKey: string = "weatherZipCode";
 
-  constructor(private weatherService: WeatherService, private swUpdate: SwUpdate) { }
+  constructor(private weatherService: WeatherService, private geonamesService: GeonamesService, private swUpdate: SwUpdate) { }
 
   ngOnInit() {
     // We subscribe to the zipCode observable on initial load as a means to an end to get the default zip loaded, so only take the 1st stream
@@ -24,7 +25,7 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
     // The service worker checks for updates during initialization and on each navigation request
     this.subscriptions.add(this.swUpdate.activated.subscribe(data => this.onSwActivated(data)));
     this.subscriptions.add(this.swUpdate.available.subscribe(data => this.onSwUpdateAvailable(data)));
-    
+    this.subscriptions.add(this.geonamesService.getPostalCode$.subscribe(data => this.onGetPostalCodeLoaded(data)));
   }
 
   ngOnDestroy(): void {
@@ -35,22 +36,42 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
 
   onZipCodeChanged() {
     if (!this.weatherZipCode) return;
-    const lastSetWeatherZipCode = localStorage.getItem(this.weatherZipCodeStorageKey);
+    const lastSetWeatherZipCode = JSON.parse(localStorage.getItem(this.weatherZipCodeStorageKey));
     //Only make a call if the zip code was changed by the user
     if (this.weatherZipCode != lastSetWeatherZipCode) {
-      localStorage.setItem(this.weatherZipCodeStorageKey, this.weatherZipCode);
+      localStorage.setItem(this.weatherZipCodeStorageKey, JSON.stringify(this.weatherZipCode));
       this.weatherService.setWeatherZipCode(this.weatherZipCode);
     }
   }
 
   onZipCodeDataLoaded(zipCode: string) {
-    localStorage.setItem(this.weatherZipCodeStorageKey, zipCode);
+    localStorage.setItem(this.weatherZipCodeStorageKey, JSON.stringify(zipCode));
     this.weatherZipCode = zipCode;
     this.weatherService.getCurrentWeather(zipCode);
   }
 
   ionTabsDidChange($event) {
     this.weatherService.currentWeatherTabSelectedSource.next($event.tab);
+  }
+
+  useCurrentGeolocation() {
+    console.log('Hello here is your location');
+    navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      // Get the zipcode for the user's location, and update the weather
+      this.geonamesService.getPostalCode(latitude, longitude);
+    }, (error) => {
+      alert('User not allowed geolocation access');
+      // Denotes the maximum length of time that is allowed to pass from the call to 
+      // getCurrentPosition() or watchPosition() until the corresponding successCallback is invoked
+    }, { timeout: 10000 })  
+  }
+
+  private onGetPostalCodeLoaded(zipCode: string) {
+    if(zipCode) {
+      this.onZipCodeDataLoaded(zipCode);
+    }
   }
 
   private onSwActivated(data: UpdateActivatedEvent) {

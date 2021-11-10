@@ -29,7 +29,7 @@ export class WeatherFutureComponent implements OnInit, OnDestroy {
   }
 
   private onGetFutureWeather(data: FutureWeather) {
-    this.weatherCityName = localStorage.getItem(this.weatherCityNameStorageKey);
+    this.weatherCityName = JSON.parse(localStorage.getItem(this.weatherCityNameStorageKey));
     this.weatherData = data;
   }
 

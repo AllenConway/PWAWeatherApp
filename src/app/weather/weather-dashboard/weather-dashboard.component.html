@@ -1,8 +1,15 @@
 <ion-tabs (ionTabsDidChange)="ionTabsDidChange($event)">
   <ion-header>
-    <ion-toolbar >
-      <ion-searchbar inputmode="numeric" (search)=onZipCodeChanged() [(ngModel)]="weatherZipCode"></ion-searchbar>
-    </ion-toolbar>
+    <div class="row">
+      <div class="row__cell row__cell--search">
+        <ion-searchbar inputmode="numeric" placeholder="Zip Code" (search)=onZipCodeChanged() [(ngModel)]="weatherZipCode"></ion-searchbar>
+      </div>
+      <div class="row__cell row__cell--location">
+        <ion-button color="light" (click)="useCurrentGeolocation()">
+          <ion-icon name="locate-outline" size="large"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
   </ion-header>
 
   <ion-tab-bar slot="bottom">

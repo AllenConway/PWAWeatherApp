@@ -27,7 +27,7 @@ export class WeatherService {
 
   constructor(private http: HttpClient) { 
     // If a previous zip code was set in storage, go ahead and initialize BehaviorSubject with the last known value
-    const lastSetWeatherZipCode = localStorage.getItem(this.weatherZipCodeStorageKey);
+    const lastSetWeatherZipCode = JSON.parse(localStorage.getItem(this.weatherZipCodeStorageKey));
     if (lastSetWeatherZipCode) {
       this.getCurrentZipCodeSource.next(lastSetWeatherZipCode);
     }
