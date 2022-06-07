@@ -22,10 +22,25 @@ npm-debug.log*
 /.sass-cache
 /.sourcemaps
 /.versions
-/.vscode
 /coverage
 /dist
-/node_modules
 /platforms
 /plugins
 /www
+
+# Miscellaneous
+/.angular/cache
+
+# Visual Studio Code
+/.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
