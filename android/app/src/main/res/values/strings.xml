@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">PWAWeatherApp</string>
+    <string name="title_activity_main">PWAWeatherApp</string>
+    <string name="package_name">com.PWAWeatherApp</string>
+    <string name="custom_url_scheme">com.PWAWeatherApp</string>
+</resources>

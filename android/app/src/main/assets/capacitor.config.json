@@ -1,0 +1,6 @@
+{
+	"appId": "com.PWAWeatherApp",
+	"appName": "PWAWeatherApp",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
