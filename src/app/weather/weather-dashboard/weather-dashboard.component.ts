@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GeonamesService } from '../shared/services/geonames.service';
 import { WeatherService } from '../shared/services/weather.service';
 import { Subscription, zip } from 'rxjs';
-import { SwUpdate, UpdateActivatedEvent, UpdateAvailableEvent } from '@angular/service-worker';
+import { SwUpdate, VersionDetectedEvent, VersionEvent, VersionReadyEvent } from '@angular/service-worker';
 
 @Component({
   selector: 'app-weather-dashboard',
@@ -23,8 +23,7 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.weatherService.getCurrentZipCode$.subscribe(data => this.onZipCodeDataLoaded(data)));
     // Let's keep tabs on the ServiceWorker state changes and subscribe to some of the lifecycle events
     // The service worker checks for updates during initialization and on each navigation request
-    this.subscriptions.add(this.swUpdate.activated.subscribe(data => this.onSwActivated(data)));
-    this.subscriptions.add(this.swUpdate.available.subscribe(data => this.onSwUpdateAvailable(data)));
+    this.subscriptions.add(this.swUpdate.versionUpdates.subscribe(data => this.onSwVersionEvent(data)));
     this.subscriptions.add(this.geonamesService.getPostalCode$.subscribe(data => this.onGetPostalCodeLoaded(data)));
   }
 
@@ -73,15 +72,26 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private onSwActivated(data: UpdateActivatedEvent) {
-    console.log('Old weather app version prior to activation: ', data.previous.hash);
-    console.log('New weather app version after activation: ', data.current.hash);
+  private onSwVersionEvent(eventData: VersionEvent) {
+    if (this.isVersionDetectedEvent(eventData)) {
+      // VersionDetectedEvent
+      console.log('Old weather app version prior to activation: ', eventData.version.hash);
+      console.log('New weather app version after activation: ', eventData.version.hash);
+    }
+    else if (this.isVersionReadyEvent(eventData)) {
+      // VersionReadyEvent
+      console.log('Current weather app version: ', eventData.currentVersion);
+      console.log('Newest available app version: ', eventData.latestVersion);
+    }
   }
 
-  private onSwUpdateAvailable(data: UpdateAvailableEvent) {
-    console.log('Current weather app version: ', data.current.hash);
-    console.log('Newest available app version: ', data.available.hash);
-    this.swUpdate.activateUpdate(); //.then(() => document.location.reload());  ensure we don't break Lazy Loading and reload the page
+  // Leverage custom defined Type Guard functions
+  private isVersionDetectedEvent(versionEvent: VersionDetectedEvent | VersionReadyEvent | VersionEvent): versionEvent is VersionDetectedEvent {
+    return (<VersionDetectedEvent>versionEvent).version !== undefined;
+  }
+
+  private isVersionReadyEvent(versionEvent: VersionDetectedEvent | VersionReadyEvent | VersionEvent): versionEvent is VersionReadyEvent {
+    return (<VersionReadyEvent>versionEvent).currentVersion !== undefined;
   }
 
 }
