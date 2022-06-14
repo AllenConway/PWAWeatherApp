@@ -3,6 +3,7 @@ import { GeonamesService } from '../shared/services/geonames.service';
 import { WeatherService } from '../shared/services/weather.service';
 import { Subscription, zip } from 'rxjs';
 import { SwUpdate, UpdateActivatedEvent, UpdateAvailableEvent } from '@angular/service-worker';
+import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 
 @Component({
   selector: 'app-weather-dashboard',
@@ -26,6 +27,7 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.swUpdate.activated.subscribe(data => this.onSwActivated(data)));
     this.subscriptions.add(this.swUpdate.available.subscribe(data => this.onSwUpdateAvailable(data)));
     this.subscriptions.add(this.geonamesService.getPostalCode$.subscribe(data => this.onGetPostalCodeLoaded(data)));
+    //this.readFileWeatherData();
   }
 
   ngOnDestroy(): void {
@@ -82,6 +84,15 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
     console.log('Current weather app version: ', data.current.hash);
     console.log('Newest available app version: ', data.available.hash);
     this.swUpdate.activateUpdate(); //.then(() => document.location.reload());  ensure we don't break Lazy Loading and reload the page
+  }
+
+  private async readFileWeatherData() {
+    const contents = await Filesystem.readFile({
+      path: 'download\weather.txt',
+      encoding: Encoding.UTF8,
+    });
+    alert(contents);
+    console.log('data:', contents);
   }
 
 }
