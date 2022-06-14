@@ -36,15 +36,26 @@
           "/svg/time.svg",
           "/svg/paper-plane.svg",
           "/svg/search-sharp.svg",
-          "/svg/close-sharp.svg"
+          "/svg/close-sharp.svg",
+          "/svg/locate-outline.svg"
         ]
       }
     }
   ],
   "dataGroups": [
     {
-      "name": "current-weather",
+      "name": "current-weather-api",
       "urls": ["https://api.openweathermap.org/data/2.5/*"],
+      "cacheConfig": {
+        "maxSize": 100,
+        "maxAge": "1h",
+        "strategy": "performance",
+        "timeout": "10s"
+      }
+    },
+    {
+      "name": "postal-code-api",
+      "urls": ["https://secure.geonames.org/*"],
       "cacheConfig": {
         "maxSize": 100,
         "maxAge": "1h",

@@ -80,8 +80,8 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
     }
     else if (this.isVersionReadyEvent(eventData)) {
       // VersionReadyEvent
-      console.log('Current weather app version: ', eventData.currentVersion);
-      console.log('Newest available app version: ', eventData.latestVersion);
+      console.log('Current weather app version: ', eventData.currentVersion.hash);
+      console.log('Newest available app version: ', eventData.latestVersion.hash);
     }
   }
 
