@@ -74,12 +74,13 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
 
   private onSwVersionEvent(eventData: VersionEvent) {
     if (this.isVersionDetectedEvent(eventData)) {
-      // VersionDetectedEvent
+      // VersionDetectedEvent: a new version is detected on the server
       console.log('Old weather app version prior to activation: ', eventData.version.hash);
       console.log('New weather app version after activation: ', eventData.version.hash);
     }
     else if (this.isVersionReadyEvent(eventData)) {
-      // VersionReadyEvent
+      // VersionReadyEvent: a new version has been downloaded and is ready for activation
+      // Use activateUpdate() to update the current client to the latest version
       console.log('Current weather app version: ', eventData.currentVersion.hash);
       console.log('Newest available app version: ', eventData.latestVersion.hash);
     }
