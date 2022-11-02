@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GeonamesService } from '../shared/services/geonames.service';
 import { WeatherService } from '../shared/services/weather.service';
-import { Subscription, zip } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { SwUpdate, UpdateActivatedEvent, UpdateAvailableEvent } from '@angular/service-worker';
-import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
+import { Encoding, Filesystem } from '@capacitor/filesystem';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-weather-dashboard',
@@ -56,17 +57,12 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
     this.weatherService.currentWeatherTabSelectedSource.next($event.tab);
   }
 
-  useCurrentGeolocation() {
-    navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      // Get the zipcode for the user's location, and update the weather
-      this.geonamesService.getPostalCode(latitude, longitude);
-    }, (error) => {
-      alert('User does not allow geolocation access');
-      // Denotes the maximum length of time that is allowed to pass from the call to 
-      // getCurrentPosition() or watchPosition() until the corresponding successCallback is invoked
-    }, { timeout: 10000 })  
+  async useCurrentGeolocation() {
+    const coordinates = await Geolocation.getCurrentPosition();
+    const latitude = coordinates.coords.latitude;
+    const longitude = coordinates.coords.longitude;
+    // Get the zipcode for the user's location, and update the weather
+    this.geonamesService.getPostalCode(latitude, longitude);
   }
 
   private onGetPostalCodeLoaded(zipCode: string) {
