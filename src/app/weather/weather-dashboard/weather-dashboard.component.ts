@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GeonamesService } from '../shared/services/geonames.service';
 import { WeatherService } from '../shared/services/weather.service';
-import { Subscription, zip } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { SwUpdate, VersionDetectedEvent, VersionEvent, VersionReadyEvent } from '@angular/service-worker';
 
 @Component({

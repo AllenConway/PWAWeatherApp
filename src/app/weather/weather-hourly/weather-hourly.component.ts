@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WeatherService } from '../shared/services/weather.service';
 import { Subscription } from 'rxjs';
 import { HourlyWeather } from '../shared/models';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-weather-hourly',
@@ -12,7 +11,6 @@ import { take } from 'rxjs/operators';
 export class WeatherHourlyComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription()
-  private zipCode: string;
   private readonly weatherCityNameStorageKey: string = "weatherCityName";
   public weatherCityName: string;
   public weatherData: HourlyWeather;
@@ -22,7 +20,6 @@ export class WeatherHourlyComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.add(this.weatherService.getHourlyWeather$.subscribe(data => this.onGetHourlyWeather(data)));
-    this.subscriptions.add(this.weatherService.getCurrentZipCode$.pipe(take(1)).subscribe(data => this.onZipCodeDataLoaded(data)));
     this.subscriptions.add(this.weatherService.currentWeatherTabSelected$.subscribe(data => this.onTabChangeCompleted(data)));
   }
 
@@ -35,10 +32,6 @@ export class WeatherHourlyComponent implements OnInit, OnDestroy {
   private onGetHourlyWeather(data: HourlyWeather) {
     this.weatherCityName = JSON.parse(localStorage.getItem(this.weatherCityNameStorageKey));
     this.weatherData = data;
-  }
-
-  private onZipCodeDataLoaded(zipCode: string) {
-    this.zipCode = zipCode;
   }
 
   private onTabChangeCompleted(tabName: string) {

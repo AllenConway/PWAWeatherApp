@@ -1,9 +1,12 @@
 {
   "name": "PWA Weather App",
-  "short_name": "PWA Weather App",
+  "description": "An Angular PWA containing weather data based on location",
+  "short_name": "PWA WX",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
+  "orientation" : "any",
+  "lang": "en-US",
   "scope": "./",
   "start_url": "./",
   "icons": [
