@@ -24,8 +24,8 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy ARM Template Files'
   inputs:
-    SourceFolder: 'typings/'
-    Contents: 'cordova-typings.d.ts'
+    SourceFolder: '[.azure/ARMTemplates/]'
+    Contents: 'azuredeploy*.json'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: ArchiveFiles@2
