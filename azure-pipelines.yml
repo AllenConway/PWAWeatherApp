@@ -22,22 +22,15 @@ steps:
   displayName: 'npm install and build'
 
 - task: ArchiveFiles@2
-  displayName: Archive Angular Build
   inputs:
-    rootFolderOrFile: www
+    rootFolderOrFile: 'www'
     includeRootFolder: false
-
-- task: CopyFiles@2
-  displayName: Copy Azure ARM Templates
-  inputs:
-    SourceFolder: '.azure/ARMTemplates/'
-    Contents: 'azuredeploy*.json'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
 
 - task: PublishBuildArtifacts@1
-  displayName: Publish Artifact
   inputs:
-    FileCopyOptions: ''
-
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
