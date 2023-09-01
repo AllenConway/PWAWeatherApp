@@ -1,0 +1,45 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "subscriptionId": {
+          "value": "e31d48fb-bcb0-4148-b3f9-78ff51f5e760"
+      },
+      "name": {
+          "value": "PWAWeatherApp"
+      },
+      "location": {
+          "value": "East US"
+      },
+      "hostingPlanName": {
+          "value": "ASP-pwaweatherapprg-9070"
+      },
+      "serverFarmResourceGroup": {
+          "value": "pwa-weather-app-rg"
+      },
+      "alwaysOn": {
+          "value": true
+      },
+      "ftpsState": {
+          "value": "FtpsOnly"
+      },
+      "sku": {
+          "value": "Standard"
+      },
+      "skuCode": {
+          "value": "S1"
+      },
+      "numberOfWorkers": {
+          "value": "1"
+      },
+      "workerSize": {
+          "value": "0"
+      },
+      "workerSizeId": {
+          "value": "0"
+      },
+      "linuxFxVersion": {
+          "value": "NODE|18-lts"
+      }
+  }
+}
