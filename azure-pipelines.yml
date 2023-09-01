@@ -14,7 +14,6 @@ steps:
   displayName: 'Use Node 18.x'
   inputs:
     versionSpec: 18.x
-  displayName: 'Install Node.js'
 
 - script: |
     npm install -g @angular/cli
