@@ -40,6 +40,9 @@
         },
         "linuxFxVersion": {
             "type": "string"
+        },
+        "startupCommand": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -76,7 +79,8 @@
                     ],
                     "linuxFxVersion": "[parameters('linuxFxVersion')]",
                     "alwaysOn": "[parameters('alwaysOn')]",
-                    "ftpsState": "[parameters('ftpsState')]"
+                    "ftpsState": "[parameters('ftpsState')]",
+                    "appCommandLine": "[parameters('startupCommand')]"
                 },
                 "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
                 "clientAffinityEnabled": false,
