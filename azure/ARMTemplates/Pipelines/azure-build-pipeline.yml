@@ -25,7 +25,7 @@ steps:
   displayName: 'Copy ARM Template Files'
   inputs:
     SourceFolder: 'azure/ARMTemplates/'
-    Contents: 'azuredeploy*.json'
+    Contents: 'azure-appservice*.json'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: ArchiveFiles@2
