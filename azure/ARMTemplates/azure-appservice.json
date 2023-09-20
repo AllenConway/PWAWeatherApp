@@ -108,6 +108,19 @@
                 "reserved": true,
                 "zoneRedundant": false
             },
+            "resources": [
+                {
+                    "apiVersion": "2022-09-01",
+                    "name": "QA",
+                    "type": "slots",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', concat(parameters('name'), '-qa'))]"
+                    ],
+                    "properties": {
+                    }
+                }
+            ],
             "sku": {
                 "Tier": "[parameters('sku')]",
                 "Name": "[parameters('skuCode')]"
