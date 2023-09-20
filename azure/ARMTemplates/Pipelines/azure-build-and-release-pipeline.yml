@@ -1,0 +1,90 @@
+### YamlMime:Module
+
+# Node.js with Angular
+# Build a Node.js project that uses Angular.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+# NOTE: This is a build and deploy pipeline, that leverages build stages to preform 
+# all neceassary steps within to build, provision (ARM), and deploy to Azure.
+
+trigger:
+- master
+
+variables:
+  AppServiceName: 'PWAWeatherApp'
+  AppServiceResourceGroup: 'pwa-weather-app-rg'
+
+
+stages:
+  - stage: Build
+    displayName: "Build PWAWeatherApp and Publish Artifact"
+    jobs:
+      - job: BuildAngularWebApp
+        pool:
+          vmImage: ubuntu-latest
+
+        steps:
+        - task: NodeTool@0
+          displayName: 'Use Node 18.x'
+          inputs:
+            versionSpec: 18.x
+
+        - script: |
+            npm install -g @angular/cli
+            npm install
+            ng build --configuration production
+          displayName: 'npm install and Angular build'
+
+        - task: CopyFiles@2
+          displayName: 'Copy ARM Template Files'
+          inputs:
+            SourceFolder: 'azure/ARMTemplates/'
+            Contents: 'azure-appservice*.json'
+            TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+        - task: ArchiveFiles@2
+          displayName: 'Archive Angular Build'
+          inputs:
+            rootFolderOrFile: 'www'
+            includeRootFolder: false
+            archiveType: 'zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+            replaceExistingArchive: true
+
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish Build Artifacts to drop folder'
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
+
+  - stage: DeployDev
+    displayName: "Deploy Angular App to Dev Environment"
+    jobs:
+      - deployment: 
+        pool:
+          vmImage: ubuntu-latest
+        environment: 'Dev'
+        strategy:
+            runOnce:
+              deploy:
+                steps:
+                - task: AzureResourceManagerTemplateDeployment@3
+                  displayName: 'Azure ARM Template App Service Deploy'
+                  inputs:
+                    azureResourceManagerConnection: 'Azure Xpirit MPN Subscription Service Principal'
+                    subscriptionId: 'e31d48fb-bcb0-4148-b3f9-78ff51f5e760'
+                    resourceGroupName: '$(AppServiceResourceGroup)'
+                    location: 'East US'
+                    csmFile: '$(Pipeline.Workspace)/_PWAWeatherApp CI-CD/drop/azure-appservice.json'
+                    csmParametersFile: '$(Pipeline.Workspace)/_PWAWeatherApp CI-CD/drop/azure-appservice.parameters.json'
+                - task: AzureRmWebAppDeployment@4
+                  displayName: 'Azure App Service Deploy: PWAWeatherApp'
+                  inputs:
+                    azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
+                    WebAppName: '$(AppServiceName)'
+                    deployToSlotOrASE: true
+                    ResourceGroupName: '$(AppServiceResourceGroup)'
+                    packageForLinux: $(Pipeline.Workspace)/**/*.zip
+                  
