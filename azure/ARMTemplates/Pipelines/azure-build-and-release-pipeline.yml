@@ -77,8 +77,8 @@ stages:
                     subscriptionId: 'e31d48fb-bcb0-4148-b3f9-78ff51f5e760'
                     resourceGroupName: '$(AppServiceResourceGroup)'
                     location: 'East US'
-                    csmFile: '$(Pipeline.Workspace)/_PWAWeatherApp CI-CD/drop/azure-appservice.json'
-                    csmParametersFile: '$(Pipeline.Workspace)/_PWAWeatherApp CI-CD/drop/azure-appservice.parameters.json'
+                    csmFile: '$(Pipeline.Workspace)/drop/azure-appservice.json'
+                    csmParametersFile: '$(Pipeline.Workspace)/drop/azure-appservice.parameters.json'
                 - task: AzureRmWebAppDeployment@4
                   displayName: 'Azure App Service Deploy: PWAWeatherApp'
                   inputs:
