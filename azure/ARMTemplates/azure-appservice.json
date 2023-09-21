@@ -56,6 +56,7 @@
             "type": "Microsoft.Web/sites",
             "location": "[parameters('location')]",
             "tags": {
+                "Slot": "Production",
                 "Technology": "Angular",
                 "Stack": "Javascript/TypeScript"
             },
@@ -93,16 +94,59 @@
             "resources": [
                 {
                     "apiVersion": "2022-03-01",
-                    "name": "qa",
+                    "name": "develop",
                     "type": "slots",
                     "tags": {
-                        "displayName": "TST Slot"
+                        "Slot": "Develop",
+                        "Technology": "Angular",
+                        "Stack": "Javascript/TypeScript"
                     },
                     "location": "[parameters('location')]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
                     ],
                     "properties": {
+                        "clientAffinityEnabled": false,
+                        "httpsOnly": true,
+                        "publicNetworkAccess": "Enabled"
+                    }
+                },
+                {
+                    "apiVersion": "2022-03-01",
+                    "name": "qa",
+                    "type": "slots",
+                    "tags": {
+                        "Slot": "QA",
+                        "Technology": "Angular",
+                        "Stack": "Javascript/TypeScript"
+                    },
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
+                    ],
+                    "properties": {
+                        "clientAffinityEnabled": false,
+                        "httpsOnly": true,
+                        "publicNetworkAccess": "Enabled"
+                    }
+                },
+                {
+                    "apiVersion": "2022-03-01",
+                    "name": "staging",
+                    "type": "slots",
+                    "tags": {
+                        "Slot": "Staging",
+                        "Technology": "Angular",
+                        "Stack": "Javascript/TypeScript"
+                    },
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
+                    ],
+                    "properties": {
+                        "clientAffinityEnabled": false,
+                        "httpsOnly": true,
+                        "publicNetworkAccess": "Enabled"
                     }
                 }
             ]
