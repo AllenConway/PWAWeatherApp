@@ -89,7 +89,23 @@
                 "clientAffinityEnabled": false,
                 "httpsOnly": true,
                 "publicNetworkAccess": "Enabled"
-            }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2022-03-01",
+                    "name": "qa",
+                    "type": "slots",
+                    "tags": {
+                        "displayName": "TST Slot"
+                    },
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
+                    ],
+                    "properties": {
+                    }
+                }
+            ]
         },
         {
             "apiVersion": "2022-03-01",
