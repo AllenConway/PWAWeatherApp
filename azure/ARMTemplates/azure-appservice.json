@@ -45,10 +45,13 @@
             "type": "string"
         }
     },
-    "variables": {},
+    "variables": {
+        "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+        "serverFarmHostingPlan": "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+    },
     "resources": [
         {
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2022-03-01",
             "name": "[parameters('name')]",
             "type": "Microsoft.Web/sites",
             "location": "[parameters('location')]",
@@ -58,7 +61,7 @@
             },
             "dependsOn": [
                 "microsoft.insights/components/PWAWeatherApp",
-                "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+                "[variables('serverFarmHostingPlan')]"
             ],
             "properties": {
                 "name": "[parameters('name')]",
@@ -82,15 +85,14 @@
                     "ftpsState": "[parameters('ftpsState')]",
                     "appCommandLine": "[parameters('startupCommand')]"
                 },
-                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "serverFarmId": "[variables('serverFarmId')]",
                 "clientAffinityEnabled": false,
-                "virtualNetworkSubnetId": null,
                 "httpsOnly": true,
                 "publicNetworkAccess": "Enabled"
             }
         },
         {
-            "apiVersion": "2022-09-01",
+            "apiVersion": "2022-03-01",
             "name": "[parameters('hostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
             "location": "[parameters('location')]",
@@ -108,29 +110,16 @@
                 "reserved": true,
                 "zoneRedundant": false
             },
-            "resources": [
-                {
-                    "apiVersion": "2022-09-01",
-                    "name": "QA",
-                    "type": "slots",
-                    "location": "[resourceGroup().location]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Web/Sites', concat(parameters('name'), '-qa'))]"
-                    ],
-                    "properties": {
-                    }
-                }
-            ],
             "sku": {
                 "Tier": "[parameters('sku')]",
                 "Name": "[parameters('skuCode')]"
             }
         },
         {
-            "apiVersion": "2020-02-02-preview",
+            "apiVersion": "2020-02-02",
             "name": "PWAWeatherApp",
             "type": "microsoft.insights/components",
-            "location": "eastus",
+            "location": "[parameters('location')]",
             "kind": "web",
             "dependsOn": [
                 "newWorkspaceTemplate"
@@ -143,23 +132,23 @@
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-10-01",
+            "apiVersion": "2021-04-01",
             "name": "newWorkspaceTemplate",
             "resourceGroup": "DefaultResourceGroup-EUS",
             "subscriptionId": "[parameters('subscriptionId')]",
             "properties": {
                 "mode": "Incremental",
                 "template": {
-                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
                     "contentVersion": "1.0.0.0",
                     "parameters": {},
                     "variables": {},
                     "resources": [
                         {
-                            "apiVersion": "2020-08-01",
+                            "apiVersion": "2021-06-01",
                             "name": "DefaultWorkspace-e31d48fb-bcb0-4148-b3f9-78ff51f5e760-EUS",
                             "type": "Microsoft.OperationalInsights/workspaces",
-                            "location": "eastus",
+                            "location": "[parameters('location')]",
                             "properties": {}
                         }
                     ]
