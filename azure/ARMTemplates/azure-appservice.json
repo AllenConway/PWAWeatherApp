@@ -46,8 +46,8 @@
         }
     },
     "variables": {
-        "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
-        "serverFarmHostingPlan": "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+        "serverFarmHostingPlan": "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+        "logAnalyticsWorkspaceName": "[concat('DefaultWorkspace-', parameters('subscriptionId'), '-EUS')]"
     },
     "resources": [
         {
@@ -86,7 +86,7 @@
                     "ftpsState": "[parameters('ftpsState')]",
                     "appCommandLine": "[parameters('startupCommand')]"
                 },
-                "serverFarmId": "[variables('serverFarmId')]",
+                "serverFarmId": "[resourceId(parameters('serverFarmResourceGroup'), 'Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
                 "clientAffinityEnabled": false,
                 "httpsOnly": true,
                 "publicNetworkAccess": "Enabled"
@@ -157,10 +157,6 @@
             "type": "Microsoft.Web/serverfarms",
             "location": "[parameters('location')]",
             "kind": "linux",
-            "tags": {
-                "Technology": "Angular",
-                "Stack": "Javascript/TypeScript"
-            },
             "dependsOn": [],
             "properties": {
                 "name": "[parameters('hostingPlanName')]",
@@ -187,12 +183,12 @@
             "properties": {
                 "ApplicationId": "[parameters('name')]",
                 "Application_Type": "web",
-                "WorkspaceResourceId": "/subscriptions/e31d48fb-bcb0-4148-b3f9-78ff51f5e760/resourceGroups/DefaultResourceGroup-EUS/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-e31d48fb-bcb0-4148-b3f9-78ff51f5e760-EUS"
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]"
             }
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2021-04-01",
+            "apiVersion": "2022-09-01",
             "name": "newWorkspaceTemplate",
             "resourceGroup": "DefaultResourceGroup-EUS",
             "subscriptionId": "[parameters('subscriptionId')]",
@@ -206,7 +202,7 @@
                     "resources": [
                         {
                             "apiVersion": "2021-06-01",
-                            "name": "DefaultWorkspace-e31d48fb-bcb0-4148-b3f9-78ff51f5e760-EUS",
+                            "name": "[variables('logAnalyticsWorkspaceName')]",
                             "type": "Microsoft.OperationalInsights/workspaces",
                             "location": "[parameters('location')]",
                             "properties": {}
