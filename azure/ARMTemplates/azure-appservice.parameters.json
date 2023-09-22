@@ -17,6 +17,9 @@
       "serverFarmResourceGroup": {
           "value": "pwa-weather-app-rg"
       },
+      "analyticsResourceGroup": {
+        "value": "default-eus-rg"
+    },
       "alwaysOn": {
           "value": true
       },

@@ -17,6 +17,9 @@
         "serverFarmResourceGroup": {
             "type": "string"
         },
+        "analyticsResourceGroup": {
+            "type": "string"
+        },
         "alwaysOn": {
             "type": "bool"
         },
@@ -183,14 +186,14 @@
             "properties": {
                 "ApplicationId": "[parameters('name')]",
                 "Application_Type": "web",
-                "WorkspaceResourceId": "[resourceId('DefaultResourceGroup-EUS', 'Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]"
+                "WorkspaceResourceId": "[resourceId(parameters('analyticsResourceGroup'), 'Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]"
             }
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2022-09-01",
             "name": "newWorkspaceTemplate",
-            "resourceGroup": "DefaultResourceGroup-EUS",
+            "resourceGroup": "[parameters('analyticsResourceGroup')]",
             "subscriptionId": "[parameters('subscriptionId')]",
             "properties": {
                 "mode": "Incremental",
