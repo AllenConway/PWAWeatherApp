@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "subscriptionId": {
@@ -54,24 +54,147 @@
     },
     "resources": [
         {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2022-09-01",
-            "name": "[parameters('analyticsResourceGroup')]",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('name')]",
+            "type": "Microsoft.Web/sites",
             "location": "[parameters('location')]",
-            "properties": {}
+            "tags": {
+                "Slot": "Production",
+                "Technology": "Angular",
+                "Stack": "Javascript/TypeScript"
+            },
+            "dependsOn": [
+                "microsoft.insights/components/PWAWeatherApp",
+                "[variables('serverFarmHostingPlan')]"
+            ],
+            "properties": {
+                "name": "[parameters('name')]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference('microsoft.insights/components/PWAWeatherApp', '2015-05-01').ConnectionString]"
+                        },
+                        {
+                            "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+                            "value": "~3"
+                        },
+                        {
+                            "name": "XDT_MicrosoftApplicationInsights_Mode",
+                            "value": "default"
+                        }
+                    ],
+                    "linuxFxVersion": "[parameters('linuxFxVersion')]",
+                    "alwaysOn": "[parameters('alwaysOn')]",
+                    "ftpsState": "[parameters('ftpsState')]",
+                    "appCommandLine": "[parameters('startupCommand')]"
+                },
+                "serverFarmId": "[resourceId(parameters('serverFarmResourceGroup'), 'Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
+                "clientAffinityEnabled": false,
+                "httpsOnly": true,
+                "publicNetworkAccess": "Enabled"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2022-03-01",
+                    "name": "develop",
+                    "type": "slots",
+                    "tags": {
+                        "Slot": "Develop",
+                        "Technology": "Angular",
+                        "Stack": "Javascript/TypeScript"
+                    },
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
+                    ],
+                    "properties": {
+                        "clientAffinityEnabled": false,
+                        "httpsOnly": true,
+                        "publicNetworkAccess": "Enabled"
+                    }
+                },
+                {
+                    "apiVersion": "2022-03-01",
+                    "name": "qa",
+                    "type": "slots",
+                    "tags": {
+                        "Slot": "QA",
+                        "Technology": "Angular",
+                        "Stack": "Javascript/TypeScript"
+                    },
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
+                    ],
+                    "properties": {
+                        "clientAffinityEnabled": false,
+                        "httpsOnly": true,
+                        "publicNetworkAccess": "Enabled"
+                    }
+                },
+                {
+                    "apiVersion": "2022-03-01",
+                    "name": "staging",
+                    "type": "slots",
+                    "tags": {
+                        "Slot": "Staging",
+                        "Technology": "Angular",
+                        "Stack": "Javascript/TypeScript"
+                    },
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
+                    ],
+                    "properties": {
+                        "clientAffinityEnabled": false,
+                        "httpsOnly": true,
+                        "publicNetworkAccess": "Enabled"
+                    }
+                }
+            ]
         },
         {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2022-09-01",
-            "name": "[parameters('serverFarmResourceGroup')]",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('hostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
             "location": "[parameters('location')]",
-            "properties": {}
+            "kind": "linux",
+            "dependsOn": [],
+            "properties": {
+                "name": "[parameters('hostingPlanName')]",
+                "workerSize": "[parameters('workerSize')]",
+                "workerSizeId": "[parameters('workerSizeId')]",
+                "numberOfWorkers": "[parameters('numberOfWorkers')]",
+                "reserved": true,
+                "zoneRedundant": false
+            },
+            "sku": {
+                "Tier": "[parameters('sku')]",
+                "Name": "[parameters('skuCode')]"
+            }
+        },
+        {
+            "apiVersion": "2020-02-02",
+            "name": "PWAWeatherApp",
+            "type": "microsoft.insights/components",
+            "location": "[parameters('location')]",
+            "kind": "web",
+            "dependsOn": [
+                "newWorkspaceTemplate"
+            ],
+            "properties": {
+                "ApplicationId": "[parameters('name')]",
+                "Application_Type": "web",
+                "WorkspaceResourceId": "[resourceId(parameters('analyticsResourceGroup'), 'Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]"
+            }
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2022-09-01",
             "name": "newWorkspaceTemplate",
             "resourceGroup": "[parameters('analyticsResourceGroup')]",
+            "subscriptionId": "[parameters('subscriptionId')]",
             "properties": {
                 "mode": "Incremental",
                 "template": {
@@ -86,150 +209,10 @@
                             "type": "Microsoft.OperationalInsights/workspaces",
                             "location": "[parameters('location')]",
                             "properties": {}
-                        },
-                        {
-                            "apiVersion": "2022-03-01",
-                            "name": "[parameters('name')]",
-                            "type": "Microsoft.Web/sites",
-                            "location": "[parameters('location')]",
-                            "tags": {
-                                "Slot": "Production",
-                                "Technology": "Angular",
-                                "Stack": "Javascript/TypeScript"
-                            },
-                            "dependsOn": [
-                                "microsoft.insights/components/PWAWeatherApp",
-                                "[variables('serverFarmHostingPlan')]"
-                            ],
-                            "properties": {
-                                "name": "[parameters('name')]",
-                                "siteConfig": {
-                                    "appSettings": [
-                                        {
-                                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                                            "value": "[reference('microsoft.insights/components/PWAWeatherApp', '2015-05-01').ConnectionString]"
-                                        },
-                                        {
-                                            "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
-                                            "value": "~3"
-                                        },
-                                        {
-                                            "name": "XDT_MicrosoftApplicationInsights_Mode",
-                                            "value": "default"
-                                        }
-                                    ],
-                                    "linuxFxVersion": "[parameters('linuxFxVersion')]",
-                                    "alwaysOn": "[parameters('alwaysOn')]",
-                                    "ftpsState": "[parameters('ftpsState')]",
-                                    "appCommandLine": "[parameters('startupCommand')]"
-                                },
-                                "serverFarmId": "[resourceId(parameters('serverFarmResourceGroup'), 'Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
-                                "clientAffinityEnabled": false,
-                                "httpsOnly": true,
-                                "publicNetworkAccess": "Enabled"
-                            },
-                            "resources": [
-                                {
-                                    "apiVersion": "2022-03-01",
-                                    "name": "develop",
-                                    "type": "slots",
-                                    "tags": {
-                                        "Slot": "Develop",
-                                        "Technology": "Angular",
-                                        "Stack": "Javascript/TypeScript"
-                                    },
-                                    "location": "[parameters('location')]",
-                                    "dependsOn": [
-                                        "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
-                                    ],
-                                    "properties": {
-                                        "clientAffinityEnabled": false,
-                                        "httpsOnly": true,
-                                        "publicNetworkAccess": "Enabled"
-                                    }
-                                },
-                                {
-                                    "apiVersion": "2022-03-01",
-                                    "name": "qa",
-                                    "type": "slots",
-                                    "tags": {
-                                        "Slot": "QA",
-                                        "Technology": "Angular",
-                                        "Stack": "Javascript/TypeScript"
-                                    },
-                                    "location": "[parameters('location')]",
-                                    "dependsOn": [
-                                        "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
-                                    ],
-                                    "properties": {
-                                        "clientAffinityEnabled": false,
-                                        "httpsOnly": true,
-                                        "publicNetworkAccess": "Enabled"
-                                    }
-                                },
-                                {
-                                    "apiVersion": "2022-03-01",
-                                    "name": "staging",
-                                    "type": "slots",
-                                    "tags": {
-                                        "Slot": "Staging",
-                                        "Technology": "Angular",
-                                        "Stack": "Javascript/TypeScript"
-                                    },
-                                    "location": "[parameters('location')]",
-                                    "dependsOn": [
-                                        "[resourceId('Microsoft.Web/Sites', parameters('name'))]"
-                                    ],
-                                    "properties": {
-                                        "clientAffinityEnabled": false,
-                                        "httpsOnly": true,
-                                        "publicNetworkAccess": "Enabled"
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "apiVersion": "2022-03-01",
-                            "name": "[parameters('hostingPlanName')]",
-                            "type": "Microsoft.Web/serverfarms",
-                            "location": "[parameters('location')]",
-                            "kind": "linux",
-                            "dependsOn": [],
-                            "properties": {
-                                "name": "[parameters('hostingPlanName')]",
-                                "workerSize": "[parameters('workerSize')]",
-                                "workerSizeId": "[parameters('workerSizeId')]",
-                                "numberOfWorkers": "[parameters('numberOfWorkers')]",
-                                "reserved": true,
-                                "zoneRedundant": false
-                            },
-                            "sku": {
-                                "Tier": "[parameters('sku')]",
-                                "Name": "[parameters('skuCode')]"
-                            }
-                        },
-                        {
-                            "apiVersion": "2020-02-02",
-                            "name": "PWAWeatherApp",
-                            "type": "microsoft.insights/components",
-                            "location": "[parameters('location')]",
-                            "kind": "web",
-                            "dependsOn": [
-                                "newWorkspaceTemplate"
-                            ],
-                            "properties": {
-                                "ApplicationId": "[parameters('name')]",
-                                "Application_Type": "web",
-                                "WorkspaceResourceId": "[resourceId(parameters('analyticsResourceGroup'), 'Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]"
-                            }
                         }
                     ]
                 }
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('analyticsResourceGroup'))]",
-                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('serverFarmResourceGroup'))]"
-            ]
+            }
         }
     ]
 }
