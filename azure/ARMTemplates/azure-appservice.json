@@ -183,7 +183,7 @@
             "properties": {
                 "ApplicationId": "[parameters('name')]",
                 "Application_Type": "web",
-                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]"
+                "WorkspaceResourceId": "[resourceId('DefaultResourceGroup-EUS', 'Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]"
             }
         },
         {
