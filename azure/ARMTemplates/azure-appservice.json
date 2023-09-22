@@ -61,6 +61,13 @@
             "properties": {}
         },
         {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2022-09-01",
+            "name": "[parameters('serverFarmResourceGroup')]",
+            "location": "[parameters('location')]",
+            "properties": {}
+        },
+        {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2022-09-01",
             "name": "newWorkspaceTemplate",
@@ -220,7 +227,8 @@
                 }
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('analyticsResourceGroup'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('analyticsResourceGroup'))]",
+                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('serverFarmResourceGroup'))]"
             ]
         }
     ]
