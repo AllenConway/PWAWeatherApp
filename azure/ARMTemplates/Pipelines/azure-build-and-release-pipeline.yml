@@ -89,7 +89,6 @@ stages:
                     scriptType: 'pscore'
                     scriptLocation: 'inlineScript'
                     inlineScript: |
-                      'az group create --name $APPSERVICERESOURCEGROUP --location $AZURELOCATION'
                       'az group create --name $DEFAULTANALYTICSRESOURCEGROUP --location $AZURELOCATION'
                 - task: AzureResourceManagerTemplateDeployment@3
                   displayName: 'Azure ARM Template Deploy: Provision App Service'
