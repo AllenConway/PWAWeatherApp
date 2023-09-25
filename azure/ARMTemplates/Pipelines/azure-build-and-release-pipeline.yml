@@ -79,19 +79,16 @@ stages:
               deploy:
                 steps:
                 - task: AzureCLI@2
+                  displayName: 'Azure CLI: Provision Resource Groups'
                   inputs:
                     azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
                     scriptType: 'pscore'
                     scriptLocation: 'inlineScript'
-                    inlineScript: 'az group create --name pwa-weather-app-rg --location eastus'
-                - task: AzureCLI@2
-                  inputs:
-                    azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
-                    scriptType: 'pscore'
-                    scriptLocation: 'inlineScript'
-                    inlineScript: 'az group create --name default-eus-rg --location eastus'
+                    inlineScript: |
+                      'az group create --name pwa-weather-app-rg --location eastus'
+                      'az group create --name default-eus-rg --location eastus'
                 - task: AzureResourceManagerTemplateDeployment@3
-                  displayName: 'Azure ARM Template App Service Deploy'
+                  displayName: 'Azure ARM Template Deploy: Provision App Service'
                   inputs:
                     azureResourceManagerConnection: 'Azure Xpirit MPN Subscription Service Principal'
                     subscriptionId: 'e31d48fb-bcb0-4148-b3f9-78ff51f5e760'
