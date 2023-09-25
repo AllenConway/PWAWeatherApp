@@ -19,13 +19,25 @@ trigger:
 pr:
 - none
 
-# Note: variables will be injected as environmental variables if also needed within PowerShell scripts
+# Note: Use readonly variables that can't be overwritten by injection and safe to use in PowerShell scripts below 
+# An alternative is variables will be injected as environmental variables if also needed within PowerShell scripts
 # See: https://learn.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#environment-variables
 variables:
-  AppServiceName: 'PWAWeatherApp'
-  AppServiceResourceGroup: 'pwa-weather-app-rg'
-  DefaultAnalyticsResourceGroup: 'default-eus-rg'
-  AzureLocation: 'eastus'
+  - name: AppServiceName 
+    value: 'PWAWeatherApp' 
+    readonly: true
+  
+  - name: AppServiceResourceGroup 
+    value: 'pwa-weather-app-rg'
+    readonly: true
+
+  - name: DefaultAnalyticsResourceGroup 
+    value: 'default-eus-rg'
+    readonly: true
+
+  - name: AzureLocation
+    value: 'eastus'
+    readonly: true
 
 
 stages:
