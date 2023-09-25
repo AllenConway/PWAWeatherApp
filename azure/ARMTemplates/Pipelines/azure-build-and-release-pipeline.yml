@@ -81,13 +81,13 @@ stages:
                 - task: AzureCLI@2
                   inputs:
                     azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
-                    scriptType: 'batch'
+                    scriptType: 'pscore'
                     scriptLocation: 'inlineScript'
                     inlineScript: 'az group create --name pwa-weather-app-rg --location eastus'
                 - task: AzureCLI@2
                   inputs:
                     azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
-                    scriptType: 'batch'
+                    scriptType: 'pscore'
                     scriptLocation: 'inlineScript'
                     inlineScript: 'az group create --name default-eus-rg --location eastus'
                 - task: AzureResourceManagerTemplateDeployment@3
