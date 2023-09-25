@@ -19,9 +19,13 @@ trigger:
 pr:
 - none
 
+# Note: variables will be injected as environmental variables if also needed within PowerShell scripts
+# See: https://learn.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#environment-variables
 variables:
   AppServiceName: 'PWAWeatherApp'
   AppServiceResourceGroup: 'pwa-weather-app-rg'
+  DefaultAnalyticsResourceGroup: 'default-eus-rg'
+  AzureLocation: 'eastus'
 
 
 stages:
@@ -85,8 +89,8 @@ stages:
                     scriptType: 'pscore'
                     scriptLocation: 'inlineScript'
                     inlineScript: |
-                      'az group create --name pwa-weather-app-rg --location eastus'
-                      'az group create --name default-eus-rg --location eastus'
+                      'az group create --name $APPSSERVICERESOURCEGROUP --location $AZURELOCATION'
+                      'az group create --name $DEFAULTANALYTICSRESOURCEGROUP --location $AZURELOCATION'
                 - task: AzureResourceManagerTemplateDeployment@3
                   displayName: 'Azure ARM Template Deploy: Provision App Service'
                   inputs:
