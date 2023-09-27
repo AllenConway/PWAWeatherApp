@@ -83,13 +83,12 @@ stages:
             ArtifactName: 'drop'
             publishLocation: 'Container'
 
-  - stage: DeployDev
-    displayName: "Deploy Angular App to Dev Environment"
+  - stage: DeployAzure
+    displayName: "Provision Azure Resources"
     jobs:
       - deployment: 
         pool:
           vmImage: ubuntu-latest
-        environment: 'Develop'
         strategy:
             runOnce:
               deploy:
@@ -112,18 +111,29 @@ stages:
                     location: 'East US'
                     csmFile: '$(Pipeline.Workspace)/drop/azure-appservice.json'
                     csmParametersFile: '$(Pipeline.Workspace)/drop/azure-appservice.parameters.json'
-                - task: AzureRmWebAppDeployment@4
-                  displayName: 'Azure App Service Deploy: PWAWeatherApp'
+
+  - stage: DeployDev
+    displayName: "Deploy Dev"
+    jobs:
+      - deployment: 
+        pool:
+          vmImage: ubuntu-latest
+        environment: 'Develop'
+        strategy:
+            runOnce:
+              deploy:
+                steps:
+                - task: AzureWebApp@1
                   inputs:
                     azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
-                    WebAppName: '$(AppServiceName)'
+                    appType: 'webAppLinux'
+                    appName: '$(AppServiceName)'
                     deployToSlotOrASE: true
-                    SlotName: 'develop'
-                    ResourceGroupName: '$(AppServiceResourceGroup)'
-                    packageForLinux: $(Pipeline.Workspace)/**/*.zip
-
+                    resourceGroupName: '$(AppServiceResourceGroup)'
+                    slotName: 'Develop'
+                    package: $(Pipeline.Workspace)/**/*.zip
   - stage: DeployQA
-    displayName: "Deploy Angular App to QA Environment"
+    displayName: "Deploy QA"
     jobs:
       - deployment: 
         pool:
@@ -141,9 +151,9 @@ stages:
                     deployToSlotOrASE: true
                     resourceGroupName: '$(AppServiceResourceGroup)'
                     slotName: 'QA'
-                    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+                    package: $(Pipeline.Workspace)/**/*.zip
   - stage: DeployStaging
-    displayName: "Deploy Angular App to Staging Environment"
+    displayName: "Deploy Staging"
     jobs:
       - deployment: 
         pool:
@@ -161,9 +171,9 @@ stages:
                     deployToSlotOrASE: true
                     resourceGroupName: '$(AppServiceResourceGroup)'
                     slotName: 'Staging'
-                    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+                    package: $(Pipeline.Workspace)/**/*.zip
   - stage: PromoteProduction
-    displayName: "Promote Angular App to Production Environment"
+    displayName: "Promote to Production"
     jobs:
       - deployment: 
         pool:
