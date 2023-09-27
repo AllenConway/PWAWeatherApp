@@ -83,7 +83,7 @@ stages:
             ArtifactName: 'drop'
             publishLocation: 'Container'
 
-  - stage:
+  - stage: ProvisionAzure
     displayName: 'Provision Azure Resources'
     jobs:
       - deployment: 'Provision Azure'
@@ -113,7 +113,7 @@ stages:
                     csmFile: '$(Pipeline.Workspace)/drop/azure-appservice.json'
                     csmParametersFile: '$(Pipeline.Workspace)/drop/azure-appservice.parameters.json'
 
-  - stage: 
+  - stage: DeployDev
     displayName: 'Deploy Dev'
     jobs:
       - deployment: 'Deploy to Dev'
@@ -133,7 +133,7 @@ stages:
                     resourceGroupName: '$(AppServiceResourceGroup)'
                     slotName: 'Develop'
                     package: $(Pipeline.Workspace)/**/*.zip
-  - stage:
+  - stage: DeployQA
     displayName: 'Deploy QA'
     jobs:
       - deployment: 'Deploy to QA'
@@ -153,7 +153,7 @@ stages:
                     resourceGroupName: '$(AppServiceResourceGroup)'
                     slotName: 'QA'
                     package: $(Pipeline.Workspace)/**/*.zip
-  - stage:
+  - stage: DeployStaging
     displayName: 'Deploy Staging'
     jobs:
       - deployment: 'Deploy to Staging'
@@ -173,7 +173,7 @@ stages:
                     resourceGroupName: '$(AppServiceResourceGroup)'
                     slotName: 'Staging'
                     package: $(Pipeline.Workspace)/**/*.zip
-  - stage:
+  - stage: PromoteProduction
     displayName: 'Promote Production'
     jobs:
       - deployment: 'Swap Staging to Production'
