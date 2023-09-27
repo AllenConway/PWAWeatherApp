@@ -42,7 +42,7 @@ variables:
 
 stages:
   - stage: Build
-    displayName: "Build PWAWeatherApp and Publish Artifact"
+    displayName: 'Build PWAWeatherApp and Publish Artifact'
     jobs:
       - job: BuildAngularWebApp
         pool:
@@ -83,10 +83,10 @@ stages:
             ArtifactName: 'drop'
             publishLocation: 'Container'
 
-  - stage: DeployAzure
-    displayName: "Provision Azure Resources"
+  - stage:
+    displayName: 'Provision Azure Resources'
     jobs:
-      - deployment: DeployAzure
+      - deployment: 'Provision Azure'
         pool:
           vmImage: ubuntu-latest
         environment: 'Production'
@@ -113,10 +113,10 @@ stages:
                     csmFile: '$(Pipeline.Workspace)/drop/azure-appservice.json'
                     csmParametersFile: '$(Pipeline.Workspace)/drop/azure-appservice.parameters.json'
 
-  - stage: DeployDev
-    displayName: "Deploy Dev"
+  - stage: 
+    displayName: 'Deploy Dev'
     jobs:
-      - deployment: DeployDev
+      - deployment: 'Deploy to Dev'
         pool:
           vmImage: ubuntu-latest
         environment: 'Develop'
@@ -133,10 +133,10 @@ stages:
                     resourceGroupName: '$(AppServiceResourceGroup)'
                     slotName: 'Develop'
                     package: $(Pipeline.Workspace)/**/*.zip
-  - stage: DeployQA
-    displayName: "Deploy QA"
+  - stage:
+    displayName: 'Deploy QA'
     jobs:
-      - deployment: DeployQA
+      - deployment: 'Deploy to QA'
         pool:
           vmImage: ubuntu-latest
         environment: 'QA'
@@ -153,10 +153,10 @@ stages:
                     resourceGroupName: '$(AppServiceResourceGroup)'
                     slotName: 'QA'
                     package: $(Pipeline.Workspace)/**/*.zip
-  - stage: DeployStaging
-    displayName: "Deploy Staging"
+  - stage:
+    displayName: 'Deploy Staging'
     jobs:
-      - deployment: DeployStaging
+      - deployment: 'Deploy to Staging'
         pool:
           vmImage: ubuntu-latest
         environment: 'Staging'
@@ -173,10 +173,10 @@ stages:
                     resourceGroupName: '$(AppServiceResourceGroup)'
                     slotName: 'Staging'
                     package: $(Pipeline.Workspace)/**/*.zip
-  - stage: PromoteProduction
-    displayName: "Promote to Production"
+  - stage:
+    displayName: 'Promote Production'
     jobs:
-      - deployment: SwapProduction
+      - deployment: 'Swap Staging to Production'
         pool:
           vmImage: ubuntu-latest
         environment: 'Production'
@@ -193,4 +193,3 @@ stages:
                     ResourceGroupName: '$(AppServiceResourceGroup)'
                     SourceSlot: 'Staging'
                     SwapWithProduction: true
-                    TargetSlot: 'Production'
