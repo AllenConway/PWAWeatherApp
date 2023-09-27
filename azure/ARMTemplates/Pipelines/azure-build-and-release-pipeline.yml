@@ -86,7 +86,7 @@ stages:
   - stage: ProvisionAzure
     displayName: 'Provision Azure Resources'
     jobs:
-      - deployment: 'Provision Azure'
+      - deployment: ProvisionAzure
         pool:
           vmImage: ubuntu-latest
         environment: 'Production'
@@ -116,7 +116,7 @@ stages:
   - stage: DeployDev
     displayName: 'Deploy Dev'
     jobs:
-      - deployment: 'Deploy to Dev'
+      - deployment: DeployDev
         pool:
           vmImage: ubuntu-latest
         environment: 'Develop'
@@ -136,7 +136,7 @@ stages:
   - stage: DeployQA
     displayName: 'Deploy QA'
     jobs:
-      - deployment: 'Deploy to QA'
+      - deployment: DeployQA
         pool:
           vmImage: ubuntu-latest
         environment: 'QA'
@@ -156,7 +156,7 @@ stages:
   - stage: DeployStaging
     displayName: 'Deploy Staging'
     jobs:
-      - deployment: 'Deploy to Staging'
+      - deployment: DeployStaging
         pool:
           vmImage: ubuntu-latest
         environment: 'Staging'
@@ -176,7 +176,7 @@ stages:
   - stage: PromoteProduction
     displayName: 'Promote Production'
     jobs:
-      - deployment: 'Swap Staging to Production'
+      - deployment: SwapProduction
         pool:
           vmImage: ubuntu-latest
         environment: 'Production'
