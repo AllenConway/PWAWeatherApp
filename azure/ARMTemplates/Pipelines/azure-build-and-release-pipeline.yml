@@ -87,8 +87,6 @@ stages:
     displayName: "Provision Azure Resources"
     jobs:
       - deployment: DeployAzure
-        dependsOn: BuildAngularWebApp
-        condition: succeeded()
         pool:
           vmImage: ubuntu-latest
         environment: 'Production'
@@ -119,8 +117,6 @@ stages:
     displayName: "Deploy Dev"
     jobs:
       - deployment: DeployDev
-        dependsOn: DeployAzure
-        condition: succeeded()
         pool:
           vmImage: ubuntu-latest
         environment: 'Develop'
@@ -141,8 +137,6 @@ stages:
     displayName: "Deploy QA"
     jobs:
       - deployment: DeployQA
-        dependsOn: DeployDev
-        condition: succeeded()
         pool:
           vmImage: ubuntu-latest
         environment: 'QA'
@@ -163,8 +157,6 @@ stages:
     displayName: "Deploy Staging"
     jobs:
       - deployment: DeployStaging
-        dependsOn: DeployQA
-        condition: succeeded()
         pool:
           vmImage: ubuntu-latest
         environment: 'Staging'
@@ -185,8 +177,6 @@ stages:
     displayName: "Promote to Production"
     jobs:
       - deployment: SwapProduction
-        dependsOn: DeployStaging
-        condition: succeeded()
         pool:
           vmImage: ubuntu-latest
         environment: 'Production'
