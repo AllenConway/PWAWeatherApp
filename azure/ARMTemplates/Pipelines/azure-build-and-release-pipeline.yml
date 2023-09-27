@@ -89,7 +89,7 @@ stages:
       - deployment: 
         pool:
           vmImage: ubuntu-latest
-        environment: 'Dev'
+        environment: 'Develop'
         strategy:
             runOnce:
               deploy:
@@ -118,6 +118,68 @@ stages:
                     azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
                     WebAppName: '$(AppServiceName)'
                     deployToSlotOrASE: true
+                    SlotName: 'develop'
                     ResourceGroupName: '$(AppServiceResourceGroup)'
                     packageForLinux: $(Pipeline.Workspace)/**/*.zip
-                  
+
+  - stage: DeployQA
+    displayName: "Deploy Angular App to QA Environment"
+    jobs:
+      - deployment: 
+        pool:
+          vmImage: ubuntu-latest
+        environment: 'QA'
+        strategy:
+            runOnce:
+              deploy:
+                steps:
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
+                    appType: 'webAppLinux'
+                    appName: '$(AppServiceName)'
+                    deployToSlotOrASE: true
+                    resourceGroupName: '$(AppServiceResourceGroup)'
+                    slotName: 'QA'
+                    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+  - stage: DeployStaging
+    displayName: "Deploy Angular App to Staging Environment"
+    jobs:
+      - deployment: 
+        pool:
+          vmImage: ubuntu-latest
+        environment: 'Staging'
+        strategy:
+            runOnce:
+              deploy:
+                steps:
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
+                    appType: 'webAppLinux'
+                    appName: '$(AppServiceName)'
+                    deployToSlotOrASE: true
+                    resourceGroupName: '$(AppServiceResourceGroup)'
+                    slotName: 'Staging'
+                    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+  - stage: PromoteProduction
+    displayName: "Promote Angular App to Production Environment"
+    jobs:
+      - deployment: 
+        pool:
+          vmImage: ubuntu-latest
+        environment: 'Production'
+        strategy:
+            runOnce:
+              deploy:
+                steps:
+                - task: AzureAppServiceManage@0
+                  displayName: ''
+                  inputs:
+                    azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
+                    Action: 'Swap Slots'
+                    WebAppName: '$(AppServiceName)'
+                    ResourceGroupName: '$(AppServiceResourceGroup)'
+                    SourceSlot: 'Staging'
+                    SwapWithProduction: true
+                    TargetSlot: 'Production'
