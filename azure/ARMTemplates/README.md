@@ -1,4 +1,4 @@
-#PWA Weather App Azure Deployments using Azure Dev Ops and ARM Templates
+# PWA Weather App Azure Deployments using Azure Dev Ops and ARM Templates
 
 The contents in this folder provide the following:
 - Azure DevOps Build and Release Pipleine
@@ -14,40 +14,46 @@ Prerequisites:
 4. Create an ADO pipeline pointing to an existing YAML file -> azure-build-and-release-pipeline.yml in the repo (or fork if coming from OSS world)
 
 Alternative Considerations: Using Terraform IaC is a preffered method to ARM templates in favor of some of the following factors:
-    - More intuitive syntax
-    - Cloud provider agnostic (ARM is Azure provider only)
-    - State management for provisioning efficiency
-    - Industry standard approach
+- More intuitive syntax
+- Cloud provider agnostic (ARM is Azure provider only)
+- State management for provisioning efficiency
+- Industry standard approach
 
 However if there is a familarity with ARM and usage in Azure, this process still provides a solid end-to-end solution
 for deployment to PaaS resources in the cloud.    
 
-##File Breakdown
+Current Azure DevOps Project: https://allenconway.visualstudio.com/PWAWeatherApp
 
-###azure-appservice.json
+## File Breakdown
 
-Purpose: ARM Template with defintition to prision the following:
-    - Azure App Service
-        - Depolyment slots: Develop, QA, Staging, Production
-    - Azure App Service Plan
-    - Application Insights
+### azure-appservice.json
 
-###azure-appservice.parameters.json
+Purpose: ARM Template with defintition to provision the following:
+- Azure App Service
+  - Depolyment slots: Develop, QA, Staging, Production
+- Azure App Service Plan
+- Application Insights
+
+### azure-appservice.parameters.json
 
 Purpose: Provides parameter values for using at runtime for azure-appservice.json
 ToDo: If deploying this independently, ensure parameter values within this file are unique to your deployment
 
-###Pipelines/azure-build-and-release-pipeline.yml
+### Pipelines/azure-build-and-release-pipeline.yml
 
 Purpose: This single YAML file will do both the build and release stages. This does _not_ require a separate
 'Release' created in Azure DevOps like the older metholodlogy or when using Classic Pipleines. 
 This pipeline will do the following:
-    - Build the Angular app from this repo
-    - Create an output artifact (.zip)
-    - Use the Azure CLI to create resource groups at the subscription level prior to deploying the ARM template resources to them
-    - Deploy the Azure ARM Templates
-    - Execute the ARM Templates in Azure to provision the resources
-    - Deploy the built PWAWeatherApp to Azure using the resources provisioned above
+- Build the Angular app from this repo
+- Create an output artifact (.zip)
+- Use the Azure CLI to create resource groups at the subscription level prior to deploying the ARM template resources to them
+- Deploy the Azure ARM Templates
+- Execute the ARM Templates in Azure to provision the resources
+- Deploy the built PWAWeatherApp to Azure using the resources provisioned above
+  - Develop
+  - QA
+  - Staging
+  - Production
 
 Note: There is a separate step to create the resource groups via an AzureCLI step prior to the ARM Template execution. This is because
 the ARM templates use a Resource based template and Resource Groups are created at the Subscription level and would require
@@ -57,10 +63,13 @@ if the resource groups aren't 100% creaed and available prior to creating additi
 Therefore the easiest way to handle this was in a separate step leveraging the CLI to create the 2 required resource groups 1st.
 See for more information: https://samcogan.com/deploying-resource-groups-with-arm-templates/
 
-ToDo: If deploying this independently, ensure variable values within this file are unique to your deployment
-In Progress: Deployment slot stages are not deployed to and a part of the release at this time; only the production slot
+Current multi-stage build and release pipeline purposely does not have any permission gates requiring approval
+prior to moving to the next stage. This can be modified if needed. 
 
-###Pipelines/azure-build-pipeline.yml
+ToDo: If deploying this independently, ensure variable values within this file are unique to your deployment.
+Improvement would be to place repetitive release stages into parameratized file and reference as a template instead. 
+
+### Pipelines/azure-build-pipeline.yml
 
 Purpose: This is an _optional_ alternative that creates a pipeline that will *only* build the
 PWAWeatherApp and create an output artifact. This is currently not in use, and only herre as
@@ -74,7 +83,7 @@ This pipeline will do the following:
 Requirement: If using this pipeline, you would need to create a separate Release pipeline
 in Azure DevOps that uses the artifact from this build.
 
-##Expected Outcome
+## Expected Outcome
 
 On successful build of this pipeline, the application should be up and running at the following URL:
 https://pwaweatherapp.azurewebsites.net
