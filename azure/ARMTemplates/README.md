@@ -22,6 +22,11 @@ Alternative Considerations: Using Terraform IaC is a preffered method to ARM tem
 However if there is a familarity with ARM and usage in Azure, this process still provides a solid end-to-end solution
 for deployment to PaaS resources in the cloud.    
 
+For the ARM Templates in this repo it's reccomended to use the ARM Template Test Toolkit and run the following to validate prior to committing any changes:
+Test-AzTemplate -TemplatePath azure-appservice.json
+
+See the following for more information: https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/test-toolkit
+
 Current Azure DevOps Project: https://allenconway.visualstudio.com/PWAWeatherApp
 
 ## File Breakdown
