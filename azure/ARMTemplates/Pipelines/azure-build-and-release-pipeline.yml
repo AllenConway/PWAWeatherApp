@@ -97,7 +97,7 @@ stages:
                 - task: AzureCLI@2
                   displayName: 'Azure CLI: Provision Resource Groups'
                   inputs:
-                    azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
+                    azureSubscription: 'Azure Xebia MPN Subscription | Service Principal'
                     scriptType: 'pscore'
                     scriptLocation: 'inlineScript'
                     inlineScript: |
@@ -106,7 +106,7 @@ stages:
                 - task: AzureResourceManagerTemplateDeployment@3
                   displayName: 'Azure ARM Template Deploy: Provision App Service'
                   inputs:
-                    azureResourceManagerConnection: 'Azure Xpirit MPN Subscription Service Principal'
+                    azureResourceManagerConnection: 'Azure Xebia MPN Subscription | Service Principal'
                     subscriptionId: 'e31d48fb-bcb0-4148-b3f9-78ff51f5e760'
                     resourceGroupName: '$(AppServiceResourceGroup)'
                     location: 'East US'
@@ -126,7 +126,7 @@ stages:
                 steps:
                 - task: AzureWebApp@1
                   inputs:
-                    azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
+                    azureSubscription: 'Azure Xebia MPN Subscription | Service Principal'
                     appType: 'webAppLinux'
                     appName: '$(AppServiceName)'
                     deployToSlotOrASE: true
@@ -146,7 +146,7 @@ stages:
                 steps:
                 - task: AzureWebApp@1
                   inputs:
-                    azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
+                    azureSubscription: 'Azure Xebia MPN Subscription | Service Principal'
                     appType: 'webAppLinux'
                     appName: '$(AppServiceName)'
                     deployToSlotOrASE: true
@@ -166,7 +166,7 @@ stages:
                 steps:
                 - task: AzureWebApp@1
                   inputs:
-                    azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
+                    azureSubscription: 'Azure Xebia MPN Subscription | Service Principal'
                     appType: 'webAppLinux'
                     appName: '$(AppServiceName)'
                     deployToSlotOrASE: true
@@ -187,7 +187,7 @@ stages:
                 - task: AzureAppServiceManage@0
                   displayName: ''
                   inputs:
-                    azureSubscription: 'Azure Xpirit MPN Subscription Service Principal'
+                    azureSubscription: 'AAzure Xebia MPN Subscription | Service Principal'
                     Action: 'Swap Slots'
                     WebAppName: '$(AppServiceName)'
                     ResourceGroupName: '$(AppServiceResourceGroup)'
