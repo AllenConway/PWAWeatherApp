@@ -19,6 +19,15 @@ trigger:
 pr:
 - none
 
+parameters:
+- name: IaCLanguage
+  type: string
+  default: 'arm'
+
+- name: IaCFileContents
+  type: string
+  default: 'azure-appservice*.json'
+
 # Note: Use readonly variables that can't be overwritten by injection and safe to use in PowerShell scripts below 
 # An alternative is variables will be injected as environmental variables if also needed within PowerShell scripts
 # See: https://learn.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#environment-variables
@@ -61,10 +70,10 @@ stages:
           displayName: 'npm install and Angular build'
 
         - task: CopyFiles@2
-          displayName: 'Copy ARM Template Files'
+          displayName: 'Copy ${{ parameters.IaCLanguage }} Template Files'
           inputs:
-            SourceFolder: 'azure/arm/'
-            Contents: 'azure-appservice*.json'
+            SourceFolder: 'azure/${{ parameters.IaCLanguage }}/'
+            Contents: ${{ parameters.IaCFileContents }}
             TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
         - task: ArchiveFiles@2
