@@ -32,6 +32,10 @@ parameters:
 # An alternative is variables will be injected as environmental variables if also needed within PowerShell scripts
 # See: https://learn.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#environment-variables
 variables:
+  - name: AzureSubscriptionId
+    value: '233779e9-4d8e-43ab-8c13-36b86d4386ca'
+    readonly: true
+
   - name: AppServiceName 
     value: 'PWAWeatherApp' 
     readonly: true
@@ -116,7 +120,7 @@ stages:
                   displayName: 'Azure ARM Template Deploy: Provision App Service'
                   inputs:
                     azureResourceManagerConnection: 'Azure Xebia MPN Subscription | Service Principal'
-                    subscriptionId: 'e31d48fb-bcb0-4148-b3f9-78ff51f5e760'
+                    subscriptionId: '$(AzureSubscriptionId)'
                     resourceGroupName: '$(AppServiceResourceGroup)'
                     location: 'East US'
                     csmFile: '$(Pipeline.Workspace)/drop/azure-appservice.json'
