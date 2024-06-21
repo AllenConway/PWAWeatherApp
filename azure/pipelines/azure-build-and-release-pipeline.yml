@@ -36,6 +36,10 @@ variables:
     value: '233779e9-4d8e-43ab-8c13-36b86d4386ca'
     readonly: true
 
+  - name: AzureServicePrincipalName
+    value: 'Azure Allen MVP Subscription | Service Principal'
+    readonly: true
+
   - name: AppServiceName 
     value: 'PWAWeatherApp' 
     readonly: true
@@ -51,7 +55,6 @@ variables:
   - name: AzureLocation
     value: 'eastus'
     readonly: true
-
 
 stages:
   - stage: Build
@@ -110,7 +113,7 @@ stages:
                 - task: AzureCLI@2
                   displayName: 'Azure CLI: Provision Resource Groups'
                   inputs:
-                    azureSubscription: 'Azure Xebia MPN Subscription | Service Principal'
+                    azureSubscription: '$(AzureServicePrincipalName)'
                     scriptType: 'pscore'
                     scriptLocation: 'inlineScript'
                     inlineScript: |
@@ -119,7 +122,7 @@ stages:
                 - task: AzureResourceManagerTemplateDeployment@3
                   displayName: 'Azure ARM Template Deploy: Provision App Service'
                   inputs:
-                    azureResourceManagerConnection: 'Azure Xebia MPN Subscription | Service Principal'
+                    azureResourceManagerConnection: '$(AzureServicePrincipalName)'
                     subscriptionId: '$(AzureSubscriptionId)'
                     resourceGroupName: '$(AppServiceResourceGroup)'
                     location: 'East US'
@@ -139,7 +142,7 @@ stages:
                 steps:
                 - task: AzureWebApp@1
                   inputs:
-                    azureSubscription: 'Azure Xebia MPN Subscription | Service Principal'
+                    azureSubscription: '$(AzureServicePrincipalName)'
                     appType: 'webAppLinux'
                     appName: '$(AppServiceName)'
                     deployToSlotOrASE: true
@@ -159,7 +162,7 @@ stages:
                 steps:
                 - task: AzureWebApp@1
                   inputs:
-                    azureSubscription: 'Azure Xebia MPN Subscription | Service Principal'
+                    azureSubscription: '$(AzureServicePrincipalName)'
                     appType: 'webAppLinux'
                     appName: '$(AppServiceName)'
                     deployToSlotOrASE: true
@@ -179,7 +182,7 @@ stages:
                 steps:
                 - task: AzureWebApp@1
                   inputs:
-                    azureSubscription: 'Azure Xebia MPN Subscription | Service Principal'
+                    azureSubscription: '$(AzureServicePrincipalName)'
                     appType: 'webAppLinux'
                     appName: '$(AppServiceName)'
                     deployToSlotOrASE: true
@@ -200,7 +203,7 @@ stages:
                 - task: AzureAppServiceManage@0
                   displayName: ''
                   inputs:
-                    azureSubscription: 'Azure Xebia MPN Subscription | Service Principal'
+                    azureSubscription: '$(AzureServicePrincipalName)'
                     Action: 'Swap Slots'
                     WebAppName: '$(AppServiceName)'
                     ResourceGroupName: '$(AppServiceResourceGroup)'
