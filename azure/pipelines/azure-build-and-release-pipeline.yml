@@ -36,8 +36,8 @@ variables:
     value: '233779e9-4d8e-43ab-8c13-36b86d4386ca'
     readonly: true
 
-  - name: AzureServicePrincipalName
-    value: 'Azure Allen MVP Subscription | Service Principal'
+  - name: AzureServiceConnectionName
+    value: 'Azure Allen MVP Subscription | Service Connection'
     readonly: true
 
   - name: AppServiceName 
@@ -113,7 +113,7 @@ stages:
                 - task: AzureCLI@2
                   displayName: 'Azure CLI: Provision Resource Groups'
                   inputs:
-                    azureSubscription: '$(AzureServicePrincipalName)'
+                    azureSubscription: '$(AzureServiceConnectionName)'
                     scriptType: 'pscore'
                     scriptLocation: 'inlineScript'
                     inlineScript: |
@@ -122,7 +122,7 @@ stages:
                 - task: AzureResourceManagerTemplateDeployment@3
                   displayName: 'Azure ARM Template Deploy: Provision App Service'
                   inputs:
-                    azureResourceManagerConnection: '$(AzureServicePrincipalName)'
+                    azureResourceManagerConnection: '$(AzureServiceConnectionName)'
                     subscriptionId: '$(AzureSubscriptionId)'
                     resourceGroupName: '$(AppServiceResourceGroup)'
                     location: 'East US'
@@ -142,7 +142,7 @@ stages:
                 steps:
                 - task: AzureWebApp@1
                   inputs:
-                    azureSubscription: '$(AzureServicePrincipalName)'
+                    azureSubscription: '$(AzureServiceConnectionName)'
                     appType: 'webAppLinux'
                     appName: '$(AppServiceName)'
                     deployToSlotOrASE: true
@@ -162,7 +162,7 @@ stages:
                 steps:
                 - task: AzureWebApp@1
                   inputs:
-                    azureSubscription: '$(AzureServicePrincipalName)'
+                    azureSubscription: '$(AzureServiceConnectionName)'
                     appType: 'webAppLinux'
                     appName: '$(AppServiceName)'
                     deployToSlotOrASE: true
@@ -182,7 +182,7 @@ stages:
                 steps:
                 - task: AzureWebApp@1
                   inputs:
-                    azureSubscription: '$(AzureServicePrincipalName)'
+                    azureSubscription: '$(AzureServiceConnectionName)'
                     appType: 'webAppLinux'
                     appName: '$(AppServiceName)'
                     deployToSlotOrASE: true
@@ -203,7 +203,7 @@ stages:
                 - task: AzureAppServiceManage@0
                   displayName: ''
                   inputs:
-                    azureSubscription: '$(AzureServicePrincipalName)'
+                    azureSubscription: '$(AzureServiceConnectionName)'
                     Action: 'Swap Slots'
                     WebAppName: '$(AppServiceName)'
                     ResourceGroupName: '$(AppServiceResourceGroup)'
