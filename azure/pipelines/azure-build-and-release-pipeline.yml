@@ -8,14 +8,14 @@
 # NOTE: This is a build and deploy pipeline, that leverages build stages to preform 
 # all neceassary steps within to build, provision (ARM), and deploy to Azure.
 
-# Pipeline will run a single time for each merged PR on master. pr: none prevents 2nd build individually on the PR
+# Pipeline will run a single time for each merged PR on main. pr: none prevents 2nd build individually on the PR
 # See the following for behavior:
 # https://stackoverflow.com/questions/62735654/github-pull-requests-triggering-all-pipelines-in-azure-devops
 # https://stackoverflow.com/questions/63843925/azure-pipelines-triggers-2-jobs-per-pull-request
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/repos/azure-repos-git?view=azure-devops&tabs=yaml#disabling-the-ci-trigger
 # https://learn.microsoft.com/en-us/azure/devops/release-notes/2019/sprint-146-update#avoid-triggering-multiple-ci-builds-for-pull-requests
 trigger:
-- master
+- main
 pr:
 - none
 
