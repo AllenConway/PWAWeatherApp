@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { HourlyWeather } from '../shared/models';
 
 @Component({
-  selector: 'app-weather-hourly',
-  templateUrl: './weather-hourly.component.html',
-  styleUrls: ['./weather-hourly.component.scss'],
+    selector: 'app-weather-hourly',
+    templateUrl: './weather-hourly.component.html',
+    styleUrls: ['./weather-hourly.component.scss'],
+    standalone: false
 })
 export class WeatherHourlyComponent implements OnInit, OnDestroy {
 

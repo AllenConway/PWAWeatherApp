@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { FutureWeather } from '../shared/models/future-weather.model';
 
 @Component({
-  selector: 'app-weather-future',
-  templateUrl: './weather-future.component.html',
-  styleUrls: ['./weather-future.component.scss'],
+    selector: 'app-weather-future',
+    templateUrl: './weather-future.component.html',
+    styleUrls: ['./weather-future.component.scss'],
+    standalone: false
 })
 export class WeatherFutureComponent implements OnInit, OnDestroy {
 

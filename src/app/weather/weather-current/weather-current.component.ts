@@ -4,9 +4,10 @@ import { WeatherService } from '../shared/services/weather.service';
 import { CurrentWeather } from '../shared/models/current-weather.model';
 
 @Component({
-  selector: 'app-weather-current',
-  templateUrl: './weather-current.component.html',
-  styleUrls: ['./weather-current.component.scss'],
+    selector: 'app-weather-current',
+    templateUrl: './weather-current.component.html',
+    styleUrls: ['./weather-current.component.scss'],
+    standalone: false
 })
 export class WeatherCurrentComponent implements OnInit {
 

@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { SwUpdate, VersionDetectedEvent, VersionEvent, VersionReadyEvent } from '@angular/service-worker';
 
 @Component({
-  selector: 'app-weather-dashboard',
-  templateUrl: './weather-dashboard.component.html',
-  styleUrls: ['./weather-dashboard.component.scss'],
+    selector: 'app-weather-dashboard',
+    templateUrl: './weather-dashboard.component.html',
+    styleUrls: ['./weather-dashboard.component.scss'],
+    standalone: false
 })
 export class WeatherDashboardComponent implements OnInit, OnDestroy {
 
