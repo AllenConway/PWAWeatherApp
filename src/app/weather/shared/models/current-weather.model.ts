@@ -38,6 +38,7 @@ export interface Main {
 export interface Wind {
     speed: number;
     deg: number;
+    gust?: number; // Optional gust property for forecast API
 }
 
 export interface Clouds {
