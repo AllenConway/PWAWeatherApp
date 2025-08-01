@@ -4,7 +4,7 @@
     <img [src]="weatherData?.weather[0].icon" />
   </ion-list-header>
 
-  <ng-container *ngIf="weatherData">
+  @if (weatherData) {
     <ion-grid>
       <ion-row>
         <ion-col size="12">
@@ -45,5 +45,5 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-  </ng-container>
+  }
 </ion-content>

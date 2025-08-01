@@ -3,7 +3,7 @@
     <h1>Hourly Weather</h1>
   </ion-list-header>
 
-  <ng-container *ngIf="weatherData">
+  @if (weatherData) {
     <ion-grid>
       <ion-row>
         <ion-col size="12">
@@ -16,31 +16,32 @@
               <ion-list>
                 <ion-list-header>
                   Hourly Weather
-                </ion-list-header>        
-                <ion-item *ngFor="let hourData of weatherData.forecast">
-                  <ion-avatar slot="start">
-                    <ion-grid class="ion-no-padding">
-                      <ion-row>
-                        <ion-col size="6">
-                          <img [src]="hourData.weather[0].icon">
-                          
-                        </ion-col>
-                        <ion-col size="6">
-                          <h3>{{hourData.temp | number: "1.0-0"}}</h3>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-avatar>
-                  <ion-label>
-                    <h2>{{hourData.dt * 1000 | date:'short'}}</h2>
-                    <h3>Condition: {{hourData.weather[0].main}}</h3>
-                  </ion-label>
-                </ion-item>
+                </ion-list-header>
+                @for (hourData of weatherData.forecast; track hourData) {
+                  <ion-item>
+                    <ion-avatar slot="start">
+                      <ion-grid class="ion-no-padding">
+                        <ion-row>
+                          <ion-col size="6">
+                            <img [src]="hourData.weather[0].icon">
+                          </ion-col>
+                          <ion-col size="6">
+                            <h3>{{hourData.temp | number: "1.0-0"}}</h3>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-avatar>
+                    <ion-label>
+                      <h2>{{hourData.dt * 1000 | date:'short'}}</h2>
+                      <h3>Condition: {{hourData.weather[0].main}}</h3>
+                    </ion-label>
+                  </ion-item>
+                }
               </ion-list>
             </ion-card-content>
           </ion-card>
         </ion-col>
       </ion-row>
     </ion-grid>
-  </ng-container>
+  }
 </ion-content>
