@@ -76,6 +76,10 @@ stages:
             ng build --configuration production
           displayName: 'npm install and Angular build'
 
+        - script: |
+            cp -r www/browser/* www/
+          displayName: 'Flatten Angular build output for deployment'
+
         - task: CopyFiles@2
           displayName: 'Copy ${{ parameters.IaCLanguage }} Template Files'
           inputs:
@@ -86,7 +90,7 @@ stages:
         - task: ArchiveFiles@2
           displayName: 'Archive Angular Build'
           inputs:
-            rootFolderOrFile: 'www'
+            rootFolderOrFile: '$(System.DefaultWorkingDirectory)/www'
             includeRootFolder: false
             archiveType: 'zip'
             archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
