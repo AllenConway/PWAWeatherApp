@@ -1,6 +1,6 @@
 <ion-content [fullscreen]="true">
   <ion-list-header>
-    <h1>7 Day Weather</h1>
+    <h1>5 Day Weather</h1>
   </ion-list-header>
 
   <ng-container *ngIf="weatherData">
@@ -15,7 +15,7 @@
             <ion-card-content class="ion-no-padding">
               <ion-list>
                 <ion-list-header>
-                  7-Day Weather Forecast
+                  5-Day Weather Forecast
                 </ion-list-header>        
                 <ion-item *ngFor="let futureWeatherData of weatherData.daily">
                   <ion-avatar slot="start">
