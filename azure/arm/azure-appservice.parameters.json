@@ -42,7 +42,7 @@
           "value": "0"
       },
       "linuxFxVersion": {
-          "value": "NODE|18-lts"
+          "value": "NODE|20-lts"
       },
       "startupCommand": {
           "value": "pm2 serve /home/site/wwwroot --no-daemon --spa"
