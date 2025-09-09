@@ -1,0 +1,48 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "subscriptionId": {
+      "value": "4ee742f0-2480-42d2-9f19-6bfccb45e4d4"
+    },
+    "name": {
+      "value": "PWAWeatherApp"
+    },
+    "location": {
+      "value": "East US"
+    },
+    "hostingPlanName": {
+      "value": "ASP-pwaweatherapprg-9070"
+    },
+    "serverFarmResourceGroup": {
+      "value": "pwa-weather-app-rg"
+    },
+    "analyticsResourceGroup": {
+      "value": "default-eus-rg"
+    },
+    "alwaysOn": {
+      "value": true
+    },
+    "ftpsState": {
+      "value": "FtpsOnly"
+    },
+    "sku": {
+      "value": "Standard"
+    },
+    "skuCode": {
+      "value": "S1"
+    },
+    "numberOfWorkers": {
+      "value": "1"
+    },
+    "workerSizeId": {
+      "value": "0"
+    },
+    "linuxFxVersion": {
+      "value": "NODE|20-lts"
+    },
+    "startupCommand": {
+      "value": "pm2 serve /home/site/wwwroot --no-daemon --spa"
+    }
+  }
+}
