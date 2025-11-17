@@ -22,10 +22,15 @@ export class GeonamesService {
       'username': this.geonamesUserName
     };
     const url: string = `${this.geonamesBaseUrl}/findNearbyPostalCodesJSON`;
-    this.http.get<GeoNamePostal>(url, {params: params}).subscribe(response => {
-      if (response) {
-        const zipCode = response.postalCodes[0].postalCode;
-        this.getPostalCodeSource.next(zipCode);    
+    this.http.get<GeoNamePostal>(url, {params: params}).subscribe({
+      next: (response) => {
+        if (response && response.postalCodes && response.postalCodes.length > 0) {
+          const zipCode = response.postalCodes[0].postalCode;
+          this.getPostalCodeSource.next(zipCode);    
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching postal code:', error);
       }
     });
   }
