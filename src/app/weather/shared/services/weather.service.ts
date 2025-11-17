@@ -40,15 +40,20 @@ export class WeatherService {
         'appid': this.openWeatherAPIKey
       };
       const url: string = `${this.openWeatherBaseUrl}/weather`;
-      this.http.get<CurrentWeather>(url, {params: params}).subscribe(response => {
-        this.weatherCurrentZip = zipCode;
-        if (response) {
-          response?.weather.forEach(item => {
-            // Convert icon code to full URL for template display
-            item.icon = `https://openweathermap.org/img/wn/${item.icon}@2x.png`
-          });
+      this.http.get<CurrentWeather>(url, {params: params}).subscribe({
+        next: (response) => {
+          this.weatherCurrentZip = zipCode;
+          if (response) {
+            response?.weather.forEach(item => {
+              // Convert icon code to full URL for template display
+              item.icon = `https://openweathermap.org/img/wn/${item.icon}@2x.png`
+            });
+          }
+          this.getCurrentWeatherSource.next(response);
+        },
+        error: (error) => {
+          console.error('Error fetching current weather:', error);
         }
-        this.getCurrentWeatherSource.next(response);
       });
   }
 
@@ -58,6 +63,12 @@ export class WeatherService {
     const currentWeather = this.getCurrentWeather$.subscribe(weather => {
       latitude = weather?.coord.lat;
       longitude = weather?.coord.lon;
+
+      // Guard against undefined coordinates
+      if (latitude === undefined || longitude === undefined) {
+        console.error('Cannot fetch hourly weather: missing coordinates');
+        return;
+      }
 
       const params = {
         'lat': latitude.toString(),
@@ -82,6 +93,12 @@ export class WeatherService {
     const currentWeather = this.getCurrentWeather$.subscribe(weather => {
       latitude = weather?.coord.lat;
       longitude = weather?.coord.lon;
+
+      // Guard against undefined coordinates
+      if (latitude === undefined || longitude === undefined) {
+        console.error('Cannot fetch future weather: missing coordinates');
+        return;
+      }
 
       const params = {
         'lat': latitude.toString(),
