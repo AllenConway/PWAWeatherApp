@@ -8,17 +8,19 @@
   <base href="/"/>
 
   <meta name="color-scheme" content="light dark"/>
-  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0"/>
   <meta name="format-detection" content="telephone=no"/>
   <meta name="msapplication-tap-highlight" content="no"/>
 
   <link rel="icon" type="image/png" href="assets/icon/favicon.png"/>
   <link rel="apple-touch-icon" href="assets/apple.png">
 
-  <!-- add to homescreen for ios -->
-  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="description" content="Current weather, hourly forecast, and 5-day forecast by location"/>
+  <!-- Required for iOS Safari standalone/home screen installation -->
   <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+  <!-- Required for Android Chrome standalone/home screen installation (apple-prefixed variant deprecated in Chrome) -->
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <style>
     :root {
       --ion-safe-area-top: 20px;

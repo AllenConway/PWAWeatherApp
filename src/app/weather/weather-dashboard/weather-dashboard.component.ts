@@ -22,10 +22,16 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // We subscribe to the zipCode observable on initial load as a means to an end to get the default zip loaded, so only take the 1st stream
     this.subscriptions.add(this.weatherService.getCurrentZipCode$.subscribe(data => this.onZipCodeDataLoaded(data)));
+    this.subscriptions.add(this.geonamesService.getPostalCode$.subscribe(data => this.onGetPostalCodeLoaded(data)));
     // Let's keep tabs on the ServiceWorker state changes and subscribe to some of the lifecycle events
     // The service worker checks for updates during initialization and on each navigation request
-    this.subscriptions.add(this.swUpdate.versionUpdates.subscribe(data => this.onSwVersionEvent(data)));
-    this.subscriptions.add(this.geonamesService.getPostalCode$.subscribe(data => this.onGetPostalCodeLoaded(data)));
+    if (this.swUpdate.isEnabled) {
+      this.subscriptions.add(this.swUpdate.versionUpdates.subscribe(data => this.onSwVersionEvent(data)));
+      this.subscriptions.add(this.swUpdate.unrecoverable.subscribe(() => {
+        console.error('Service worker entered an unrecoverable state. Reloading the app.');
+        document.location.reload();
+      }));
+    }
   }
 
   ngOnDestroy(): void {
@@ -75,15 +81,15 @@ export class WeatherDashboardComponent implements OnInit, OnDestroy {
 
   private onSwVersionEvent(eventData: VersionEvent) {
     if (this.isVersionDetectedEvent(eventData)) {
-      // VersionDetectedEvent: a new version is detected on the server
-      console.log('Old weather app version prior to activation: ', eventData.version.hash);
-      console.log('New weather app version after activation: ', eventData.version.hash);
+      // VersionDetectedEvent: a new version has been detected on the server
+      console.log('New weather app version detected: ', eventData.version.hash);
     }
     else if (this.isVersionReadyEvent(eventData)) {
       // VersionReadyEvent: a new version has been downloaded and is ready for activation
-      // Use activateUpdate() to update the current client to the latest version
+      // Activate the new version and reload to ensure all users get the latest app
       console.log('Current weather app version: ', eventData.currentVersion.hash);
       console.log('Newest available app version: ', eventData.latestVersion.hash);
+      this.swUpdate.activateUpdate().then(() => document.location.reload());
     }
   }
 
