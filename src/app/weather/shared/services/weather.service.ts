@@ -45,8 +45,10 @@ export class WeatherService {
           this.weatherCurrentZip = zipCode;
           if (response) {
             response?.weather.forEach(item => {
-              // Convert icon code to full URL for template display
-              item.icon = `https://openweathermap.org/img/wn/${item.icon}@2x.png`
+              // Use local icons so Angular's service worker can cache them for offline use.
+              // Cross-origin <img> requests produce opaque responses that ngsw cannot cache,
+              // and OpenWeatherMap doesn't support CORS headers, so local files are required.
+              item.icon = `/assets/icons/weather/${item.icon}@2x.png`
             });
           }
           this.getCurrentWeatherSource.next(response);
@@ -124,8 +126,8 @@ export class WeatherService {
         temp: item.main.temp,
         weather: item.weather.map(w => ({
           ...w,
-          // Convert icon code to full URL for template display
-          icon: `https://openweathermap.org/img/wn/${w.icon}@2x.png`
+          // Local icons for offline PWA support (see note in getCurrentWeather)
+          icon: `/assets/icons/weather/${w.icon}@2x.png`
         }))
       }))
     };
@@ -191,16 +193,18 @@ export class WeatherService {
         weather: [{
           // Use most common weather condition (most representative of daily weather)
           ...representativeWeather,
-          // Convert icon code to full URL for template display
-          icon: `https://openweathermap.org/img/wn/${representativeWeather.icon}@2x.png`
+          // Local icons for offline PWA support (see note in getCurrentWeather)
+          icon: `/assets/icons/weather/${representativeWeather.icon}@2x.png`
         }],
         // Use highest precipitation probability from all intervals of the day
         pop: Math.max(...items.map(item => item.pop))
       };
     });
 
+    // Cap at 5 days - the API returns 40 data points across 5 days, but grouping by
+    // calendar date can produce 6 partial days depending on the time of the first forecast
     return {
-      daily: dailyData
+      daily: dailyData.slice(0, 5)
     };
   }
 

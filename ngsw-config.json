@@ -16,6 +16,16 @@
       }
     },
     {
+      "name": "weather-icons",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/icons/weather/*.png"
+        ]
+      }
+    },
+    {
       "name": "assets",
       "installMode": "lazy",
       "updateMode": "prefetch",
@@ -57,15 +67,6 @@
         "maxAge": "1h",
         "strategy": "performance",
         "timeout": "10s"
-      }
-    },
-    {
-      "name": "weather-icons",
-      "urls": ["https://openweathermap.org/img/wn/*"],
-      "cacheConfig": {
-        "maxSize": 50,
-        "maxAge": "7d",
-        "strategy": "performance"
       }
     }
   ]
